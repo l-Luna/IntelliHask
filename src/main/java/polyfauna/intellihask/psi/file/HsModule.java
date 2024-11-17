@@ -1,9 +1,9 @@
-package luna.intellihask.psi.file;
+package polyfauna.intellihask.psi.file;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
-import luna.intellihask.language.Extension;
-import luna.intellihask.psi.HsAstElement;
+import polyfauna.intellihask.language.Extension;
+import polyfauna.intellihask.psi.HsAstElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

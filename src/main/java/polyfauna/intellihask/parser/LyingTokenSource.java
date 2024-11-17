@@ -1,8 +1,8 @@
-package luna.intellihask.parser;
+package polyfauna.intellihask.parser;
 
 import com.intellij.lang.PsiBuilder;
-import luna.intellihask.antlr_generated.HaskellLexer;
-import luna.intellihask.psi.Tokens;
+import polyfauna.intellihask.antlr_generated.HaskellLexer;
+import polyfauna.intellihask.psi.Tokens;
 import org.antlr.intellij.adaptor.lexer.PSITokenSource;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Pair;

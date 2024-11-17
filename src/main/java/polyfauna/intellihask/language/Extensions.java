@@ -1,11 +1,11 @@
-package luna.intellihask.language;
+package polyfauna.intellihask.language;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static luna.intellihask.language.Extension.*;
+import static polyfauna.intellihask.language.Extension.*;
 
 public class Extensions{
 	

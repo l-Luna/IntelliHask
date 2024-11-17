@@ -1,9 +1,9 @@
-package luna.intellihask.parser;
+package polyfauna.intellihask.parser;
 
 import com.intellij.lang.Language;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
-import luna.intellihask.antlr_generated.HaskellLexer;
+import polyfauna.intellihask.antlr_generated.HaskellLexer;
 import org.antlr.intellij.adaptor.parser.ANTLRParseTreeToPSIConverter;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;

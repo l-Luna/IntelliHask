@@ -1,4 +1,4 @@
-package luna.intellihask.parser;
+package polyfauna.intellihask.parser;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
@@ -11,16 +11,16 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import luna.intellihask.HaskellLanguage;
-import luna.intellihask.antlr_generated.HaskellLexer;
-import luna.intellihask.antlr_generated.HaskellParser;
-import luna.intellihask.psi.HsAstElement;
-import luna.intellihask.psi.HsFile;
-import luna.intellihask.psi.file.HsLanguagePragma;
-import luna.intellihask.psi.file.HsModule;
-import luna.intellihask.psi.file.HsModuleBody;
-import luna.intellihask.psi.file.HsPragma;
-import luna.intellihask.psi.Tokens;
+import polyfauna.intellihask.HaskellLanguage;
+import polyfauna.intellihask.antlr_generated.HaskellLexer;
+import polyfauna.intellihask.antlr_generated.HaskellParser;
+import polyfauna.intellihask.psi.HsAstElement;
+import polyfauna.intellihask.psi.HsFile;
+import polyfauna.intellihask.psi.file.HsLanguagePragma;
+import polyfauna.intellihask.psi.file.HsModule;
+import polyfauna.intellihask.psi.file.HsModuleBody;
+import polyfauna.intellihask.psi.file.HsPragma;
+import polyfauna.intellihask.psi.Tokens;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.jetbrains.annotations.NotNull;
 

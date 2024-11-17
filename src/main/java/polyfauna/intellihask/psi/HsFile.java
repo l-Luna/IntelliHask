@@ -1,12 +1,12 @@
-package luna.intellihask.psi;
+package polyfauna.intellihask.psi;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.util.PsiTreeUtil;
-import luna.intellihask.HaskellFileType;
-import luna.intellihask.HaskellLanguage;
-import luna.intellihask.psi.file.HsModule;
+import polyfauna.intellihask.HaskellFileType;
+import polyfauna.intellihask.HaskellLanguage;
+import polyfauna.intellihask.psi.file.HsModule;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package luna.intellihask.annotators;
+package polyfauna.intellihask.annotators;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.lang.annotation.AnnotationHolder;
@@ -7,11 +7,11 @@ import com.intellij.lang.annotation.HighlightSeverity;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-import luna.intellihask.language.Extension;
-import luna.intellihask.language.Extensions;
-import luna.intellihask.parser.HsSyntaxHighlighter;
-import luna.intellihask.psi.file.HsModule;
-import luna.intellihask.psi.file.HsPragma;
+import polyfauna.intellihask.language.Extension;
+import polyfauna.intellihask.language.Extensions;
+import polyfauna.intellihask.parser.HsSyntaxHighlighter;
+import polyfauna.intellihask.psi.file.HsModule;
+import polyfauna.intellihask.psi.file.HsPragma;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;

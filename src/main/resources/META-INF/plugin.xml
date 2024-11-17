@@ -1,10 +1,10 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>luna.IntelliHask</id>
+    <id>polyfauna.IntelliHask</id>
 
     <name>IntelliHask</name>
 
-    <vendor email="happydeerhooves@proton.me">luna</vendor>
+    <vendor email="happydeerhooves@proton.me">polyfauna</vendor>
 
     <description><![CDATA[
     it is what it is what it is what it is what it is what it is what it is
@@ -15,7 +15,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileType
                 name="Haskell File"
-                implementationClass="luna.intellihask.HaskellFileType"
+                implementationClass="polyfauna.intellihask.HaskellFileType"
                 fieldName="INSTANCE"
                 language="Haskell"
                 extensions="hs"
@@ -23,27 +23,27 @@
 
         <lang.parserDefinition
                 language="Haskell"
-                implementationClass="luna.intellihask.parser.HsParserDefinition"
+                implementationClass="polyfauna.intellihask.parser.HsParserDefinition"
         />
 
         <lang.syntaxHighlighterFactory
                 language="Haskell"
-                implementationClass="luna.intellihask.parser.HsSyntaxHighlighter"
+                implementationClass="polyfauna.intellihask.parser.HsSyntaxHighlighter"
         />
 
         <lang.commenter
                 language="Haskell"
-                implementationClass="luna.intellihask.editor.HsCommenter"
+                implementationClass="polyfauna.intellihask.editor.HsCommenter"
         />
 
         <annotator
                 language="Haskell"
-                implementationClass="luna.intellihask.annotators.PragmaAnnotator"
+                implementationClass="polyfauna.intellihask.annotators.PragmaAnnotator"
         />
 
         <completion.contributor
                 language="Haskell"
-                implementationClass="luna.intellihask.completion.ExtCompletionContributor"
+                implementationClass="polyfauna.intellihask.completion.ExtCompletionContributor"
         />
     </extensions>
 </idea-plugin>

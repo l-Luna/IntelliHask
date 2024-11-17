@@ -1,4 +1,4 @@
-package luna.intellihask.parser;
+package polyfauna.intellihask.parser;
 
 import com.intellij.lexer.Lexer;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
@@ -8,8 +8,7 @@ import com.intellij.openapi.fileTypes.SyntaxHighlighterFactory;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.tree.IElementType;
-import luna.intellihask.antlr_generated.HaskellLexer;
-import luna.intellihask.psi.Tokens;
+import polyfauna.intellihask.psi.Tokens;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

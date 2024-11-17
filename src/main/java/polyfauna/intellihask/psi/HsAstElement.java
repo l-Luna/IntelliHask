@@ -1,11 +1,11 @@
-package luna.intellihask.psi;
+package polyfauna.intellihask.psi;
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import luna.intellihask.antlr_generated.HaskellParser;
+import polyfauna.intellihask.antlr_generated.HaskellParser;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.psi.Trees;
 import org.jetbrains.annotations.NotNull;

@@ -1,7 +1,7 @@
-package luna.intellihask.psi.file;
+package polyfauna.intellihask.psi.file;
 
 import com.intellij.lang.ASTNode;
-import luna.intellihask.psi.HsAstElement;
+import polyfauna.intellihask.psi.HsAstElement;
 import org.jetbrains.annotations.NotNull;
 
 public class HsModuleBody extends HsAstElement{

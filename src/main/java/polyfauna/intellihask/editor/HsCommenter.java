@@ -1,4 +1,4 @@
-package luna.intellihask.editor;
+package polyfauna.intellihask.editor;
 
 import com.intellij.lang.Commenter;
 import org.jetbrains.annotations.Nullable;

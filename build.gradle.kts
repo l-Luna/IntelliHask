@@ -5,7 +5,7 @@ plugins {
 	id("org.jetbrains.intellij") version "1.17.4"
 }
 
-group = "luna"
+group = "how.polyfauna"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -54,6 +54,6 @@ tasks {
 }
 
 tasks.generateGrammarSource{
-	outputDirectory = File("./build/generated-src/antlr/main/luna/intellihask/antlr_generated")
-	arguments = arguments + listOf("-visitor", "-package", "luna.intellihask.antlr_generated", "-lib", "./build/generated-src/antlr/main/luna/intellihask/antlr_generated/")
+	outputDirectory = File("./build/generated-src/antlr/main/polyfauna/intellihask/antlr_generated")
+	arguments = arguments + listOf("-visitor", "-package", "polyfauna.intellihask.antlr_generated", "-lib", "./build/generated-src/antlr/main/polyfauna/intellihask/antlr_generated/")
 }

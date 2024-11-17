@@ -1,9 +1,9 @@
-package luna.intellihask.psi;
+package polyfauna.intellihask.psi;
 
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;
-import luna.intellihask.HaskellLanguage;
-import luna.intellihask.antlr_generated.HaskellLexer;
+import polyfauna.intellihask.HaskellLanguage;
+import polyfauna.intellihask.antlr_generated.HaskellLexer;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.lexer.TokenIElementType;

@@ -1,14 +1,14 @@
-package luna.intellihask.completion;
+package polyfauna.intellihask.completion;
 
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
-import luna.intellihask.antlr_generated.HaskellParser;
-import luna.intellihask.language.Extension;
-import luna.intellihask.language.Extensions;
-import luna.intellihask.psi.Tokens;
+import polyfauna.intellihask.antlr_generated.HaskellParser;
+import polyfauna.intellihask.language.Extension;
+import polyfauna.intellihask.language.Extensions;
+import polyfauna.intellihask.psi.Tokens;
 import org.jetbrains.annotations.NotNull;
 
 public class ExtCompletionContributor extends CompletionContributor implements DumbAware{

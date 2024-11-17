@@ -1,4 +1,4 @@
-package luna.intellihask.language;
+package polyfauna.intellihask.language;
 
 // from https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/table.html
 // all 130 of them!

@@ -1,13 +1,12 @@
-package luna.intellihask.parser;
+package polyfauna.intellihask.parser;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiParser;
 import com.intellij.openapi.progress.ProgressIndicatorProvider;
 import com.intellij.psi.tree.IElementType;
-import luna.intellihask.HaskellLanguage;
-import luna.intellihask.antlr_generated.HaskellParser;
-import org.antlr.intellij.adaptor.lexer.PSITokenSource;
+import polyfauna.intellihask.HaskellLanguage;
+import polyfauna.intellihask.antlr_generated.HaskellParser;
 import org.antlr.intellij.adaptor.parser.ANTLRParseTreeToPSIConverter;
 import org.antlr.intellij.adaptor.parser.ErrorStrategyAdaptor;
 import org.antlr.intellij.adaptor.parser.SyntaxErrorListener;
