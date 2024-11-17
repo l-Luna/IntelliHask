@@ -90,7 +90,7 @@ cname
 
 // Top-Level Declarations
 topdecls
-    : (topdecl semi+)+
+    : (topdecl (semi+ topdecl)*)?
     ;
 
 topdecl
@@ -104,7 +104,7 @@ topdecl
 	;
 
 decls
-	: (decl semi+ | NEWLINE)*
+	: open_ (decl (semi+ decl)*)? close
 	;
 
 decl
@@ -113,7 +113,7 @@ decl
 	;
 
 cdecls
-	: (cdecl semi+ | NEWLINE)*
+	: open_ (cdecl (semi+ cdecl)*)? close
 	;
 
 cdecl
@@ -122,7 +122,7 @@ cdecl
 	;
 
 idecls
-	: (idecl semi+ | NEWLINE)*
+	: open_ (idecl (semi+ idecl)*)? close
 	;
 
 idecl

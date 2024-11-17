@@ -49,22 +49,27 @@ public class LyingTokenSource extends PSITokenSource{
 		
 		Token next = super.nextToken(); // possibly triggers the whitespace callback
 		preempted.push(next);
+		int indent = next.getStartIndex() - lastLineOffset - 1;
+		// any block kw not followed by {, even if there's no newline
+		boolean justStartedBlock = false;
+		if(wasBlockKw && next.getType() != HaskellLexer.CCURLY){
+			blocks.push(indent);
+			preempted.push(createTok(HaskellLexer.VOCURLY, "VOCURLY", next.getStopIndex()));
+			justStartedBlock = true;
+		}
 		if(next.getType() == HaskellLexer.EOF){
-			// all remaining VCCURLYs, plus one SEMI
+			// all remaining VCCURLYs, plus two SEMIs for the road
+			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
 			while(!blocks.isEmpty()){
 				blocks.pop();
 				preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-EOF", next.getStopIndex()));
 			}
 			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
-		}else if(next.getChannel() != HaskellLexer.WSC && next.getType() != HaskellLexer.NEWLINE && seenNewline){
+		}else if(seenNewline){
 			seenNewline = false;
-			int indent = next.getStartIndex() - lastLineOffset - 1;
-			if(wasBlockKw){
-				blocks.push(indent);
-				preempted.push(createTok(HaskellLexer.VOCURLY, "VOCURLY", next.getStopIndex()));
-			}else if(indent == curBlockIndent())
+			if(indent == curBlockIndent() && !justStartedBlock)
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
-			else if(indent < curBlockIndent()){
+			if(indent < curBlockIndent()){
 				blocks.pop();
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 				preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY", next.getStopIndex()));
