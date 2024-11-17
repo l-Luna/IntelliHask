@@ -45,13 +45,10 @@ public class ParserAdapter implements PsiParser{
 			rollbackMarker.rollbackTo();
 		}
 		
-		// Now convert ANTLR parser tree to PSI tree by mimicking subtree
-		// enter/exit with mark/done calls. I *think* this creates their parse
-		// tree (AST as they call it) when you call {@link PsiBuilder#getTreeBuilt}
 		ANTLRParseTreeToPSIConverter listener = new LyingTreeConverter(HaskellLanguage.INSTANCE, parser, builder);
 		PsiBuilder.Marker rootMarker = builder.mark();
 		ParseTreeWalker.DEFAULT.walk(listener, parseTree);
-		while(!builder.eof()){ // mop up remaining chars; this appears as nonsense on the PSI tree window though, avoid this!
+		while(!builder.eof()){ // mop up remaining chars; this appears as nonsense on the PSI tree window though, so this is a sign of errors
 			ProgressIndicatorProvider.checkCanceled();
 			builder.advanceLexer();
 		}

@@ -40,7 +40,6 @@ public class HsParserDefinition implements ParserDefinition{
 	}
 	
 	public @NotNull TokenSet getWhitespaceTokens(){
-		// note that newlines are not excluded, since the parser does care
 		return Tokens.WS;
 	}
 	

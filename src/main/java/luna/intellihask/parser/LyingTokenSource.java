@@ -72,7 +72,6 @@ public class LyingTokenSource extends PSITokenSource{
 		}
 		wasBlockKw = switch(next.getType()){
 			case HaskellLexer.LET, HaskellLexer.WHERE, HaskellLexer.DO, HaskellLexer.OF -> true;
-			// this only triggers for non-preempted tokens; those have it handled earlier
 			default -> false;
 		};
 		return preempted.pop();
