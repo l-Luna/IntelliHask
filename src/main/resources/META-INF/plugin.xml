@@ -40,5 +40,10 @@
                 language="Haskell"
                 implementationClass="luna.intellihask.annotators.PragmaAnnotator"
         />
+
+        <completion.contributor
+                language="Haskell"
+                implementationClass="luna.intellihask.completion.ExtCompletionContributor"
+        />
     </extensions>
 </idea-plugin>
