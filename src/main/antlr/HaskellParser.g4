@@ -13,11 +13,11 @@ tokens {
 // aaa
 
 module
-	: OCURLY? semi* pragmas? (module_ | body) CCURLY? semi? EOF
+	: OCURLY? semi* pragmas (module_ | body) CCURLY? semi? EOF
 	;
 
 pragmas
-    : pragma+
+    : pragma*
     ;
 
 pragma
@@ -47,7 +47,7 @@ module_
 	;
 
 body
-    : (impdecls topdecls)
+    : impdecls topdecls
     | impdecls
     | topdecls
     ;
@@ -90,7 +90,7 @@ cname
 
 // Top-Level Declarations
 topdecls
-    : (topdecl semi+ | NEWLINE)+
+    : (topdecl semi+)+
     ;
 
 topdecl

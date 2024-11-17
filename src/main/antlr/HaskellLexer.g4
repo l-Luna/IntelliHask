@@ -1733,3 +1733,6 @@ fragment CLASSIFY_So:
     | '\uffed' ..'\uffee' // Halfwidth_and_Fullwidth_Forms
     | '\ufffc' ..'\ufffd' // Specials
 ;
+
+// mop-up extra characters; these will always create parse errors later, we just can't afford lexer errors
+UNMATCHED: .;

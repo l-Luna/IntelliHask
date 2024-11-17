@@ -51,18 +51,18 @@ public class LyingTokenSource extends PSITokenSource{
 		preempted.push(next);
 		if(next.getType() == HaskellLexer.EOF){
 			// all remaining VCCURLYs, plus one SEMI
-			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
 			while(!blocks.isEmpty()){
 				blocks.pop();
 				preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-EOF", next.getStopIndex()));
 			}
+			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
 		}else if(next.getChannel() != HaskellLexer.WSC && next.getType() != HaskellLexer.NEWLINE && seenNewline){
 			seenNewline = false;
 			int indent = next.getStartIndex() - lastLineOffset - 1;
 			if(wasBlockKw){
 				blocks.push(indent);
 				preempted.push(createTok(HaskellLexer.VOCURLY, "VOCURLY", next.getStopIndex()));
-			}else if(indent >= curBlockIndent())
+			}else if(indent == curBlockIndent())
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 			else if(indent < curBlockIndent()){
 				blocks.pop();

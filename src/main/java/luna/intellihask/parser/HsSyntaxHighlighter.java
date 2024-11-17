@@ -17,6 +17,7 @@ public class HsSyntaxHighlighter extends SyntaxHighlighterFactory implements Syn
 	
 	public static final TextAttributesKey KEYWORD = DefaultLanguageHighlighterColors.KEYWORD;
 	public static final TextAttributesKey COMMENT = DefaultLanguageHighlighterColors.LINE_COMMENT;
+	public static final TextAttributesKey STRING = DefaultLanguageHighlighterColors.STRING;
 	
 	public @NotNull SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile){
 		return new HsSyntaxHighlighter();
@@ -31,6 +32,8 @@ public class HsSyntaxHighlighter extends SyntaxHighlighterFactory implements Syn
 			return arr(KEYWORD);
 		else if(Tokens.COMMENTS.contains(tt))
 			return arr(COMMENT);
+		else if(Tokens.STRINGS.contains(tt))
+			return arr(STRING);
 		
 		return new TextAttributesKey[0];
 	}

@@ -16,11 +16,35 @@ public class Tokens{
 	
 	private static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(HaskellLanguage.INSTANCE);
 	
+	// most of the keywords from HaskellLexer, but *not* ones considered special_id; those need to be semantically highlighted later
 	public static final TokenSet KEYWORDS = createTokenSet(
 			HaskellLanguage.INSTANCE,
 			
 			HaskellLexer.DATA,
-			HaskellLexer.CLASS
+			HaskellLexer.CLASS,
+			HaskellLexer.MODULE,
+			HaskellLexer.NEWTYPE,
+			HaskellLexer.INSTANCE,
+			HaskellLexer.TYPE,
+			
+			HaskellLexer.DERIVING,
+			HaskellLexer.WHERE,
+			
+			HaskellLexer.DEFAULT,
+			HaskellLexer.IMPORT,
+			HaskellLexer.INFIX,
+			HaskellLexer.INFIXL,
+			HaskellLexer.INFIXR,
+			
+			HaskellLexer.CASE,
+			HaskellLexer.LCASE,
+			HaskellLexer.DO,
+			HaskellLexer.ELSE,
+			HaskellLexer.IF,
+			HaskellLexer.IN,
+			HaskellLexer.LET,
+			HaskellLexer.OF,
+			HaskellLexer.THEN
 	);
 	
 	public static final TokenSet WS = createTokenSet(HaskellLanguage.INSTANCE, HaskellLexer.WS, HaskellLexer.TAB, HaskellLexer.NEWLINE);
