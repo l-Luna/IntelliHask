@@ -30,5 +30,10 @@
                 language="Haskell"
                 implementationClass="luna.intellihask.parser.HsSyntaxHighlighter"
         />
+
+        <lang.commenter
+                language="Haskell"
+                implementationClass="luna.intellihask.editor.HsCommenter"
+        />
     </extensions>
 </idea-plugin>
