@@ -19,6 +19,8 @@ public class HsSyntaxHighlighter extends SyntaxHighlighterFactory implements Syn
 	public static final TextAttributesKey COMMENT = DefaultLanguageHighlighterColors.LINE_COMMENT;
 	public static final TextAttributesKey STRING = DefaultLanguageHighlighterColors.STRING;
 	
+	public static final TextAttributesKey PRAGMA = DefaultLanguageHighlighterColors.METADATA;
+	
 	public @NotNull SyntaxHighlighter getSyntaxHighlighter(@Nullable Project project, @Nullable VirtualFile virtualFile){
 		return new HsSyntaxHighlighter();
 	}

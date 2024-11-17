@@ -5,6 +5,7 @@ import com.intellij.psi.tree.TokenSet;
 import luna.intellihask.HaskellLanguage;
 import luna.intellihask.antlr_generated.HaskellLexer;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
+import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.lexer.TokenIElementType;
 import org.jetbrains.annotations.Contract;
 
@@ -15,6 +16,7 @@ import static org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createToken
 public class Tokens{
 	
 	private static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(HaskellLanguage.INSTANCE);
+	private static final List<RuleIElementType> RULE_ELEMENT_TYPES = PSIElementTypeFactory.getRuleIElementTypes(HaskellLanguage.INSTANCE);
 	
 	// most of the keywords from HaskellLexer, but *not* ones considered special_id; those need to be semantically highlighted later
 	public static final TokenSet KEYWORDS = createTokenSet(
@@ -54,5 +56,10 @@ public class Tokens{
 	@Contract(pure = true)
 	public static IElementType getFor(int type){
 		return TOKEN_ELEMENT_TYPES.get(type);
+	}
+	
+	@Contract(pure = true)
+	public static IElementType getRuleFor(int type){
+		return RULE_ELEMENT_TYPES.get(type);
 	}
 }

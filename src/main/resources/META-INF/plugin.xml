@@ -35,5 +35,10 @@
                 language="Haskell"
                 implementationClass="luna.intellihask.editor.HsCommenter"
         />
+
+        <annotator
+                language="Haskell"
+                implementationClass="luna.intellihask.annotators.PragmaAnnotator"
+        />
     </extensions>
 </idea-plugin>
