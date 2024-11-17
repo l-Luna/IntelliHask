@@ -13,12 +13,8 @@ tokens {
 // aaa
 
 module
-	: OCURLY? semi* pragmas (module_ | body) CCURLY? semi? EOF
+	: OCURLY? semi* pragma* (explicit_module | body) CCURLY? semi? EOF
 	;
-
-pragmas
-    : pragma*
-    ;
 
 pragma
     : language_pragma
@@ -42,8 +38,12 @@ extension_
     : CONID
     ;
 
-module_
-	: MODULE modid exports? WHERE open_ body close semi*
+explicit_module
+	: module_header open_ body close semi*
+	;
+
+module_header
+	: MODULE modid exports? WHERE
 	;
 
 body

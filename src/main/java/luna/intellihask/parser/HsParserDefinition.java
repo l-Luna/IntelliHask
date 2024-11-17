@@ -16,7 +16,10 @@ import luna.intellihask.antlr_generated.HaskellLexer;
 import luna.intellihask.antlr_generated.HaskellParser;
 import luna.intellihask.psi.HsAstElement;
 import luna.intellihask.psi.HsFile;
-import luna.intellihask.psi.HsPragma;
+import luna.intellihask.psi.file.HsLanguagePragma;
+import luna.intellihask.psi.file.HsModule;
+import luna.intellihask.psi.file.HsModuleBody;
+import luna.intellihask.psi.file.HsPragma;
 import luna.intellihask.psi.Tokens;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.jetbrains.annotations.NotNull;
@@ -56,8 +59,14 @@ public class HsParserDefinition implements ParserDefinition{
 	
 	public @NotNull PsiElement createElement(ASTNode node){
 		IElementType type = node.getElementType();
+		if(type == Tokens.getRuleFor(HaskellParser.RULE_module))
+			return new HsModule(node);
+		if(type == Tokens.getRuleFor(HaskellParser.RULE_body))
+			return new HsModuleBody(node);
 		if(type == Tokens.getRuleFor(HaskellParser.RULE_pragma))
 			return new HsPragma(node);
+		if(type == Tokens.getRuleFor(HaskellParser.RULE_language_pragma))
+			return new HsLanguagePragma(node);
 		return new HsAstElement(node);
 	}
 	
