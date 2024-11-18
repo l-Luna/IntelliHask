@@ -226,8 +226,10 @@ ClosePragmaBracket : '#-}';
 // MultiLineMacro : '#' (~ [\n]*? '\\' '\r'? '\n')+ ~ [\n]+ -> skip;
 // Directive : '#' ~ [\n]* -> skip;
 
-COMMENT  : '--' (~[\r\n])*    -> channel(HIDDEN);
-NCOMMENT : '{-' ~[#] .*? '-}' -> channel(HIDDEN);
+COMMENT  : '--' (~[\r\n])* -> channel(HIDDEN);
+// explicitly handle the case of an empty block comment; otherwise, it fails to find not-hash and parses wrong
+// (the outer brackets just allow for the `-> channel` command)
+NCOMMENT : ('{--}' | ('{-' ~[#] .*? '-}')) -> channel(HIDDEN);
 
 OCURLY  : '{';
 CCURLY  : '}';
