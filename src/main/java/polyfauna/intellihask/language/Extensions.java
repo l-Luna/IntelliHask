@@ -17,7 +17,9 @@ public class Extensions{
 			GHCForeignImportPrim, // internal-only
 			NullaryTypeClasses, // replaced by MultiParamTypeClasses
 			Rank2Types, // not *technically* deprecated, but users should use RankNTypes
-			TypeInType
+			TypeInType,
+			IncoherentInstances, // replaced by OVERLAPPABLE, OVERLAPPING, and INCOHERENT pragmas
+			OverlappingInstances
 	);
 	
 	public static final Map<Extension, List<Extension>> IMPLIED_BY = new HashMap<>();
