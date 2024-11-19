@@ -108,8 +108,9 @@ decls
 	;
 
 decl
-	: gendecl
-	| (funlhs | pat0) rhs
+	: vartypedecl
+	| fixitydecl
+	| patfundecl
 	;
 
 cdecls
@@ -117,8 +118,9 @@ cdecls
 	;
 
 cdecl
-	: gendecl
-	| (funlhs | var) rhs
+	: vartypedecl
+	| fixitydecl
+	| varfundecl
 	;
 
 idecls
@@ -126,12 +128,23 @@ idecls
 	;
 
 idecl
-	: (funlhs | var) rhs
+	: varfundecl
 	;
 
-gendecl
+vartypedecl
 	: vars '::' (context '=>')? type
-	| fixity integer? ops
+	;
+
+fixitydecl
+	: fixity integer? ops
+	;
+
+patfundecl
+	: (funlhs | pat0) rhs
+	;
+
+varfundecl
+	: (funlhs | var) rhs
 	;
 
 ops

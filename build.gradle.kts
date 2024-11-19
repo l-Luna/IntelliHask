@@ -2,7 +2,7 @@ plugins {
 	id("java")
 	id("antlr")
 	id("org.jetbrains.kotlin.jvm") version "1.9.25"
-	id("org.jetbrains.intellij") version "1.17.4"
+	id("org.jetbrains.intellij.platform") version "2.1.0"
 }
 
 group = "how.polyfauna"
@@ -10,6 +10,10 @@ version = "1.0-SNAPSHOT"
 
 repositories {
 	mavenCentral()
+	
+	intellijPlatform {
+		defaultRepositories()
+	}
 }
 
 dependencies {
@@ -18,23 +22,21 @@ dependencies {
 	implementation("org.antlr:antlr4-intellij-adaptor:0.1")
 }
 
-// Configure Gradle IntelliJ Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-	version.set("2024.3")
-	type.set("IC") // Target IDE Platform
-	
-	plugins.set(listOf(/* Plugin Dependencies */))
+dependencies {
+	intellijPlatform {
+		instrumentationTools()
+		intellijIdeaCommunity("2024.3")
+	}
 }
 
 tasks {
 	// Set the JVM compatibility versions
 	withType<JavaCompile> {
-		sourceCompatibility = "17"
-		targetCompatibility = "17"
+		sourceCompatibility = "21"
+		targetCompatibility = "21"
 	}
 	withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-		kotlinOptions.jvmTarget = "17"
+		kotlinOptions.jvmTarget = "21"
 	}
 	
 	patchPluginXml {

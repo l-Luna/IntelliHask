@@ -40,6 +40,10 @@
                 language="Haskell"
                 implementationClass="polyfauna.intellihask.annotators.PragmaAnnotator"
         />
+        <annotator
+                language="Haskell"
+                implementationClass="polyfauna.intellihask.annotators.TyVarColourAnnotator"
+        />
 
         <completion.contributor
                 language="Haskell"
