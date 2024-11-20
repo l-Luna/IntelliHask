@@ -25,6 +25,9 @@ public class HsSyntaxHighlighter extends SyntaxHighlighterFactory implements Syn
 	}
 	
 	public @NotNull Lexer getHighlightingLexer(){
+		// HsParserDefinition sets up element types on construction, but this may be run first,
+		// returning a broken lexer if we don't redo it here
+		HsParserDefinition.defineElementTypes();
 		return new LexerAdapter();
 	}
 	

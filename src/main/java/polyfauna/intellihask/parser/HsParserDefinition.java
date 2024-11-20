@@ -31,8 +31,12 @@ public class HsParserDefinition implements ParserDefinition{
 	
 	public static final IFileElementType FILE = new IFileElementType(HaskellLanguage.INSTANCE);
 	
-	@SuppressWarnings("deprecation")
 	public HsParserDefinition(){
+		defineElementTypes();
+	}
+	
+	@SuppressWarnings("deprecation")
+	/* local */ static void defineElementTypes(){
 		PSIElementTypeFactory.defineLanguageIElementTypes(HaskellLanguage.INSTANCE, HaskellLexer.tokenNames, HaskellLexer.ruleNames);
 	}
 	
