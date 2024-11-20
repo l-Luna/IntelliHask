@@ -2,13 +2,13 @@ package polyfauna.intellihask.psi.file;
 
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.util.PsiTreeUtil;
-import polyfauna.intellihask.language.Extension;
+import polyfauna.intellihask.language.extensions.Extension;
+import polyfauna.intellihask.language.extensions.Toggle;
 import polyfauna.intellihask.psi.HsAstElement;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class HsModule extends HsAstElement{
 	
@@ -21,9 +21,9 @@ public class HsModule extends HsAstElement{
 	}
 	
 	public Set<Extension> extensions(){
-		return pragmas().stream()
+		return Toggle.resolve(pragmas().stream()
 				.flatMap(x -> x.asLanguagePragma().stream())
 				.flatMap(x -> x.extensions().stream())
-				.collect(Collectors.toSet());
+				.toList());
 	}
 }

@@ -1,4 +1,4 @@
-package polyfauna.intellihask.language;
+package polyfauna.intellihask.language.extensions;
 
 // from https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/table.html
 // all 130 of them!
@@ -132,5 +132,13 @@ public enum Extension{
 	UnliftedFFITypes,
 	UnliftedNewtypes,
 	Unsafe,
-	ViewPatterns
+	ViewPatterns;
+	
+	public Toggle on(){
+		return new Toggle(this, true);
+	}
+	
+	public Toggle off(){
+		return new Toggle(this, false);
+	}
 }

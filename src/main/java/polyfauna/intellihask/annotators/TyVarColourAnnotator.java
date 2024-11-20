@@ -7,6 +7,7 @@ import com.intellij.openapi.editor.markup.TextAttributes;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
+import polyfauna.intellihask.Util;
 import polyfauna.intellihask.psi.HsTyVarBinder;
 import polyfauna.intellihask.psi.symbol.TyVarSymbol;
 import polyfauna.intellihask.psi.type.HsTyVar;
@@ -27,10 +28,7 @@ public class TyVarColourAnnotator implements Annotator, DumbAware{
 				.             thenComparing(TyVarSymbol::name));
 		for(HsTyVar tyVar : vars)
 			for(TyVarSymbol symb : tyVar.resolveReference())
-				sortedVars.merge(symb, new ArrayList<>(List.of(tyVar)), (x, y) -> {
-					x.addAll(y);
-					return x;
-				});
+				sortedVars.merge(symb, Util.mutListOf(tyVar), Util::mergeLLeft);
 		int idx = 1;
 		for(List<HsTyVar> entry : sortedVars.values()){
 			for(HsTyVar tyVar : entry){

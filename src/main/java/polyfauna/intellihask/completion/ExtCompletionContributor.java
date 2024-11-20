@@ -6,8 +6,8 @@ import com.intellij.openapi.project.DumbAware;
 import com.intellij.patterns.PlatformPatterns;
 import com.intellij.util.ProcessingContext;
 import polyfauna.intellihask.antlr_generated.HaskellParser;
-import polyfauna.intellihask.language.Extension;
-import polyfauna.intellihask.language.Extensions;
+import polyfauna.intellihask.language.extensions.Extension;
+import polyfauna.intellihask.language.extensions.Extensions;
 import polyfauna.intellihask.psi.Tokens;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,6 +23,7 @@ public class ExtCompletionContributor extends CompletionContributor implements D
 								builder = builder.strikeout();
 							// TODO: show implied extensions on the side
 							result.addElement(builder);
+							result.addElement(LookupElementBuilder.create("No" + ext.name()));
 						}
 					}
 				});
