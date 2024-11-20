@@ -22,7 +22,7 @@ public class ExtCompletionContributor extends CompletionContributor implements D
 							if(Extensions.DEPRECATED_EXTENSIONS.contains(ext))
 								builder = builder.strikeout();
 							// TODO: show implied extensions on the side
-							result.addElement(builder);
+							result.addElement(PrioritizedLookupElement.withPriority(builder, 1));
 							result.addElement(LookupElementBuilder.create("No" + ext.name()));
 						}
 					}
