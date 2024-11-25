@@ -17,7 +17,7 @@ import java.util.List;
 
 public record TyVarSymbol(String name, HsTyVarBinder owner) implements Symbol, NavigatableSymbol{
 	
-	public @NotNull Pointer<? extends Symbol> createPointer(){
+	public @NotNull Pointer<TyVarSymbol> createPointer(){
 		return new SPointer(name, SmartPointerManager.createPointer(owner));
 	}
 	

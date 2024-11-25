@@ -13,6 +13,17 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <applicationService
+                serviceImplementation="polyfauna.intellihask.settings.IhSettings"
+        />
+
+        <applicationConfigurable
+                parentId="tools"
+                instance="polyfauna.intellihask.settings.IhSettingsConfigurable"
+                id="polyfauna.intellihask.IhSettingsConfigurable"
+                displayName="IntelliHask"
+        />
+
         <fileType
                 name="Haskell File"
                 implementationClass="polyfauna.intellihask.HaskellFileType"
@@ -48,6 +59,20 @@
         <completion.contributor
                 language="Haskell"
                 implementationClass="polyfauna.intellihask.completion.ExtCompletionContributor"
+        />
+
+        <localInspection
+                implementationClass="polyfauna.intellihask.annotators.ext.GhcErrorsInspection"
+                groupPath="Haskell"
+                enabledByDefault="true" level="WARNING"
+                groupName="External linting" displayName="GHC errors"
+                shortName="GhcErrors"
+                language="Haskell"
+        />
+
+        <externalAnnotator
+                language="Haskell"
+                implementationClass="polyfauna.intellihask.annotators.ext.GhcExternalAnnotator"
         />
     </extensions>
 </idea-plugin>
