@@ -3,7 +3,6 @@ package polyfauna.intellihask.psi.symbol;
 import com.intellij.find.usages.api.SearchTarget;
 import com.intellij.find.usages.api.UsageHandler;
 import com.intellij.model.Pointer;
-import com.intellij.model.Symbol;
 import com.intellij.navigation.NavigatableSymbol;
 import com.intellij.navigation.SymbolNavigationService;
 import com.intellij.openapi.project.Project;
@@ -23,10 +22,9 @@ import polyfauna.intellihask.psi.HsTyVarBinder;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 public record TyVarSymbol(String name, HsTyVarBinder owner) implements
-		Symbol, NavigatableSymbol,
+		HsSymbol, NavigatableSymbol,
 		DocumentationTarget, SearchTarget, RenameTarget{
 	
 	public @NotNull Pointer<TyVarSymbol> createPointer(){

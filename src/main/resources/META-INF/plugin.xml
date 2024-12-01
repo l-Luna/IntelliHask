@@ -55,12 +55,12 @@
 
         <searcher
                 forClass="com.intellij.find.usages.api.UsageSearchParameters"
-                implementationClass="polyfauna.intellihask.psi.symbol.searcher.TyVarUsageSearcher"
+                implementationClass="polyfauna.intellihask.psi.symbol.searcher.HsUsageSearcher"
         />
 
         <searcher
                 forClass="com.intellij.refactoring.rename.api.RenameUsageSearchParameters"
-                implementationClass="polyfauna.intellihask.psi.symbol.searcher.TyVarUsageRenameSearcher"
+                implementationClass="polyfauna.intellihask.psi.symbol.searcher.HsRenameUsageSearcher"
         />
 
         <!-- editing -->

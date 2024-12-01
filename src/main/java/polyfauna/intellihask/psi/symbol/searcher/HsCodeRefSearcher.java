@@ -32,7 +32,7 @@ public class HsCodeRefSearcher implements CodeReferenceSearcher{
 	}
 	
 	public @NotNull Collection<? extends @NotNull PsiSymbolReference> getReferences(@NotNull Symbol target, @NotNull LeafOccurrence occurrence){
-		if(target instanceof TyVarSymbol tv){
+		if(target instanceof TyVarSymbol){
 			HsTyVar elem = PsiTreeUtil.getParentOfType(occurrence.getStart(), HsTyVar.class, false, /* TODO(RankNTypes) */ HsTyVarBinder.class);
 			if(elem != null && elem.resolvesTo(target))
 				return List.of(elem);
