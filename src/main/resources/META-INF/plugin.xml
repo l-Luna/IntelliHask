@@ -47,6 +47,22 @@
                 implementationClass="polyfauna.intellihask.parser.HsSyntaxHighlighter"
         />
 
+        <!-- symbols -->
+
+        <lang.codeReferenceSearcher
+                implementation="polyfauna.intellihask.psi.symbol.searcher.HsCodeRefSearcher"
+        />
+
+        <searcher
+                forClass="com.intellij.find.usages.api.UsageSearchParameters"
+                implementationClass="polyfauna.intellihask.psi.symbol.searcher.TyVarUsageSearcher"
+        />
+
+        <searcher
+                forClass="com.intellij.refactoring.rename.api.RenameUsageSearchParameters"
+                implementationClass="polyfauna.intellihask.psi.symbol.searcher.TyVarUsageRenameSearcher"
+        />
+
         <!-- editing -->
 
         <lang.commenter
@@ -66,10 +82,6 @@
         />
 
         <!-- documentation -->
-
-        <!-- <platform.backend.documentation.targetProvider
-                implementation="polyfauna.intellihask.presentation.documentation.HsSelfDocProvider"
-        /> -->
 
         <!-- completion -->
 

@@ -1,5 +1,7 @@
 package polyfauna.intellihask.psi.symbol;
 
+import com.intellij.find.usages.api.SearchTarget;
+import com.intellij.find.usages.api.UsageHandler;
 import com.intellij.model.Pointer;
 import com.intellij.model.Symbol;
 import com.intellij.navigation.NavigatableSymbol;
@@ -11,18 +13,27 @@ import com.intellij.platform.backend.navigation.NavigationTarget;
 import com.intellij.platform.backend.presentation.TargetPresentation;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.search.SearchScope;
+import com.intellij.refactoring.rename.api.RenameTarget;
+import com.intellij.refactoring.rename.api.RenameValidationResult;
+import com.intellij.refactoring.rename.api.RenameValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import polyfauna.intellihask.psi.HsTyVarBinder;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
-public record TyVarSymbol(String name, HsTyVarBinder owner) implements Symbol, NavigatableSymbol, DocumentationTarget{
+public record TyVarSymbol(String name, HsTyVarBinder owner) implements
+		Symbol, NavigatableSymbol,
+		DocumentationTarget, SearchTarget, RenameTarget{
 	
 	public @NotNull Pointer<TyVarSymbol> createPointer(){
 		return new SPointer(name, SmartPointerManager.createPointer(owner));
 	}
+	
+	// navigation
 	
 	public @NotNull Collection<? extends NavigationTarget> getNavigationTargets(@NotNull Project project){
 		return owner.findNestedTyVars().stream()
@@ -31,6 +42,8 @@ public record TyVarSymbol(String name, HsTyVarBinder owner) implements Symbol, N
 				.toList();
 	}
 	
+	// documentation/presentation
+	
 	public @NotNull TargetPresentation computePresentation(){
 		return TargetPresentation.builder("").presentation();
 	}
@@ -38,6 +51,41 @@ public record TyVarSymbol(String name, HsTyVarBinder owner) implements Symbol, N
 	public @NotNull DocumentationResult computeDocumentation(){
 		return DocumentationResult.documentation("type variable <strong><samp>%s</samp></strong>".formatted(name));
 	}
+	
+	// rename
+	
+	public @NotNull String getTargetName(){
+		return name;
+	}
+	
+	public @NotNull TargetPresentation presentation(){
+		return computePresentation();
+	}
+	
+	public @Nullable SearchScope getMaximalSearchScope(){
+		return null;//new LocalSearchScope(owner);
+	}
+	
+	public @NotNull RenameValidator validator(){
+		return cand -> cand.isBlank() || Character.isUpperCase(cand.charAt(0))
+				? RenameValidationResult.invalid()
+				: RenameValidationResult.ok();
+	}
+	
+	// search
+	
+	public @NotNull UsageHandler getUsageHandler(){
+		return UsageHandler.createEmptyUsageHandler("Type Variable '%s'".formatted(name));
+	}
+	
+	
+	@Override
+	public String toString(){
+		return "TyVarSymbol[" +
+				"name=" + name + ", " +
+				"owner=" + owner + ']';
+	}
+	
 	
 	protected static class SPointer implements Pointer<TyVarSymbol>{
 		
