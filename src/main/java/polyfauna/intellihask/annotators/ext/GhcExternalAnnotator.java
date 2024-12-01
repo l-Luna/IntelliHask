@@ -17,7 +17,7 @@ import java.util.List;
 public class GhcExternalAnnotator extends ExternalAnnotator<PsiFile, List<GhcError>>{
 	
 	public @Nullable PsiFile collectInformation(@NotNull PsiFile file){
-		return isHsFile(file) ? file : null;
+		return HsFile.isHsFile(file) ? file : null;
 	}
 	
 	public @Nullable List<GhcError> doAnnotate(PsiFile info){
@@ -61,9 +61,5 @@ public class GhcExternalAnnotator extends ExternalAnnotator<PsiFile, List<GhcErr
 			passed++;
 		}
 		return passed + column - 1;
-	}
-	
-	private static boolean isHsFile(PsiFile file){
-		return file instanceof HsFile || file.getLanguage().isKindOf(HaskellLanguage.INSTANCE);
 	}
 }

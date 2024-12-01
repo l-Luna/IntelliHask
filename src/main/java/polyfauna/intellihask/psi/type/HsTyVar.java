@@ -35,9 +35,6 @@ public class HsTyVar extends HsAstElement implements PsiSymbolReference{
 	}
 	
 	public @NotNull Collection<TyVarSymbol> resolveReference(){
-		var owner = HsTyVarBinder.binderFor(this);
-		if(owner.isPresent())
-			return List.of(new TyVarSymbol(getText(), owner.get()));
-		return List.of();
+		return HsTyVarBinder.binderFor(this).map(binder -> List.of(new TyVarSymbol(getText(), binder))).orElseGet(List::of);
 	}
 }

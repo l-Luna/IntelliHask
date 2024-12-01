@@ -13,6 +13,9 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+
+        <!-- settings -->
+
         <applicationService
                 serviceImplementation="polyfauna.intellihask.settings.IhSettings"
         />
@@ -23,6 +26,8 @@
                 id="polyfauna.intellihask.IhSettingsConfigurable"
                 displayName="IntelliHask"
         />
+
+        <!-- file type -->
 
         <fileType
                 name="Haskell File"
@@ -42,10 +47,14 @@
                 implementationClass="polyfauna.intellihask.parser.HsSyntaxHighlighter"
         />
 
+        <!-- editing -->
+
         <lang.commenter
                 language="Haskell"
                 implementationClass="polyfauna.intellihask.editor.HsCommenter"
         />
+
+        <!-- annotators -->
 
         <annotator
                 language="Haskell"
@@ -56,10 +65,20 @@
                 implementationClass="polyfauna.intellihask.annotators.TyVarColourAnnotator"
         />
 
+        <!-- documentation -->
+
+        <!-- <platform.backend.documentation.targetProvider
+                implementation="polyfauna.intellihask.presentation.documentation.HsSelfDocProvider"
+        /> -->
+
+        <!-- completion -->
+
         <completion.contributor
                 language="Haskell"
                 implementationClass="polyfauna.intellihask.completion.ExtCompletionContributor"
         />
+
+        <!-- external linting -->
 
         <localInspection
                 implementationClass="polyfauna.intellihask.annotators.ext.GhcErrorsInspection"

@@ -29,6 +29,10 @@ dependencies {
 	}
 }
 
+intellijPlatform {
+	buildSearchableOptions = false
+}
+
 tasks {
 	// Set the JVM compatibility versions
 	withType<JavaCompile> {

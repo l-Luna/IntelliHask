@@ -5,10 +5,14 @@ import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.tree.IElementType;
 import polyfauna.intellihask.antlr_generated.HaskellParser;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.psi.Trees;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HsAstElement extends ASTWrapperPsiElement{
 	
@@ -19,6 +23,29 @@ public class HsAstElement extends ASTWrapperPsiElement{
 	public PsiElement @NotNull [] getChildren(){
 		// include leaves
 		return Trees.getChildren(this);
+	}
+	
+	public List<HsAstElement> getChildrenOfAstType(IElementType type){
+		List<HsAstElement> ret = new ArrayList<>();
+		for(PsiElement child : getChildren())
+			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
+				ret.add(hae);
+		return ret;
+	}
+	
+	public int countChildrenOfAstType(IElementType type){
+		int c = 0;
+		for(PsiElement child : getChildren())
+			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
+				c++;
+		return c;
+	}
+	
+	public boolean hasChildOfAstType(IElementType type){
+		for(PsiElement child : getChildren())
+			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
+				return true;
+		return false;
 	}
 	
 	public String toString(){
