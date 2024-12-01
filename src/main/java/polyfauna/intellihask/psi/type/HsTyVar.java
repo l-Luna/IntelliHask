@@ -5,14 +5,14 @@ import com.intellij.model.psi.PsiSymbolReference;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import polyfauna.intellihask.psi.HsAstElement;
+import polyfauna.intellihask.psi.HsSymbolReference;
 import polyfauna.intellihask.psi.HsTyVarBinder;
 import polyfauna.intellihask.psi.symbol.TyVarSymbol;
 
 import java.util.Collection;
 import java.util.List;
 
-public class HsTyVar extends HsAstElement implements PsiSymbolReference{
+public class HsTyVar extends HsSymbolReference{
 	
 	public HsTyVar(@NotNull ASTNode node){
 		super(node);

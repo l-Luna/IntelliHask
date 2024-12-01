@@ -7,14 +7,12 @@ import com.intellij.model.search.CodeReferenceSearcher;
 import com.intellij.model.search.LeafOccurrence;
 import com.intellij.model.search.SearchRequest;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import polyfauna.intellihask.HaskellLanguage;
-import polyfauna.intellihask.psi.HsTyVarBinder;
-import polyfauna.intellihask.psi.symbol.TyVarSymbol;
-import polyfauna.intellihask.psi.type.HsTyVar;
+import polyfauna.intellihask.psi.HsSymbolReference;
+import polyfauna.intellihask.psi.symbol.HsSymbol;
 
 import java.util.Collection;
 import java.util.List;
@@ -26,14 +24,14 @@ public class HsCodeRefSearcher implements CodeReferenceSearcher{
 	}
 	
 	public @Nullable SearchRequest getSearchRequest(@NotNull Project project, @NotNull Symbol target){
-		if(target instanceof TyVarSymbol(String name, var owner))
-			return SearchRequest.of(name, new LocalSearchScope(owner));
+		if(target instanceof HsSymbol hs)
+			return SearchRequest.of(hs.name(), hs.getMaximalSearchScope());
 		return null;
 	}
 	
 	public @NotNull Collection<? extends @NotNull PsiSymbolReference> getReferences(@NotNull Symbol target, @NotNull LeafOccurrence occurrence){
-		if(target instanceof TyVarSymbol){
-			HsTyVar elem = PsiTreeUtil.getParentOfType(occurrence.getStart(), HsTyVar.class, false, /* TODO(RankNTypes) */ HsTyVarBinder.class);
+		if(target instanceof HsSymbol hs){
+			HsSymbolReference elem = PsiTreeUtil.getParentOfType(occurrence.getStart(), false, hs.psiType());
 			if(elem != null && elem.resolvesTo(target))
 				return List.of(elem);
 		}

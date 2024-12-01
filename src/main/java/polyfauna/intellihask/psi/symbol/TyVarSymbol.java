@@ -12,13 +12,16 @@ import com.intellij.platform.backend.navigation.NavigationTarget;
 import com.intellij.platform.backend.presentation.TargetPresentation;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.search.LocalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.refactoring.rename.api.RenameTarget;
 import com.intellij.refactoring.rename.api.RenameValidationResult;
 import com.intellij.refactoring.rename.api.RenameValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import polyfauna.intellihask.psi.HsAstElement;
 import polyfauna.intellihask.psi.HsTyVarBinder;
+import polyfauna.intellihask.psi.type.HsTyVar;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,6 +32,10 @@ public record TyVarSymbol(String name, HsTyVarBinder owner) implements
 	
 	public @NotNull Pointer<TyVarSymbol> createPointer(){
 		return new SPointer(name, SmartPointerManager.createPointer(owner));
+	}
+	
+	public Class<HsTyVar> psiType(){
+		return HsTyVar.class;
 	}
 	
 	// navigation
@@ -60,8 +67,8 @@ public record TyVarSymbol(String name, HsTyVarBinder owner) implements
 		return computePresentation();
 	}
 	
-	public @Nullable SearchScope getMaximalSearchScope(){
-		return null;//new LocalSearchScope(owner);
+	public @NotNull SearchScope getMaximalSearchScope(){
+		return new LocalSearchScope(owner);
 	}
 	
 	public @NotNull RenameValidator validator(){
