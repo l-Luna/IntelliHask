@@ -7,7 +7,7 @@ import com.intellij.model.search.CodeReferenceSearcher;
 import com.intellij.model.search.LeafOccurrence;
 import com.intellij.model.search.SearchRequest;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import polyfauna.intellihask.HaskellLanguage;
@@ -30,10 +30,13 @@ public class HsCodeRefSearcher implements CodeReferenceSearcher{
 	}
 	
 	public @NotNull Collection<? extends @NotNull PsiSymbolReference> getReferences(@NotNull Symbol target, @NotNull LeafOccurrence occurrence){
-		if(target instanceof HsSymbol hs){
-			HsSymbolReference elem = PsiTreeUtil.getParentOfType(occurrence.getStart(), false, hs.psiType());
-			if(elem != null && elem.resolvesTo(target))
-				return List.of(elem);
+		if(target instanceof HsSymbol){
+			PsiElement here = occurrence.getStart();
+			while(here != null){
+				if(here instanceof HsSymbolReference hsr && hsr.resolvesTo(target))
+					return List.of(hsr);
+				here = here.getParent();
+			}
 		}
 		return List.of();
 	}

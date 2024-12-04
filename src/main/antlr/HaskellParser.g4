@@ -13,7 +13,7 @@ tokens {
 // aaa
 
 module
-	: OCURLY? semi* pragma* (explicit_module | body) CCURLY? semi? EOF
+	: OCURLY? semi* pragma* (module_header body module_footer | body) CCURLY? semi* EOF
 	;
 
 pragma
@@ -38,22 +38,16 @@ extension_
     : CONID
     ;
 
-explicit_module
-	: module_header open_ body close semi*
+module_header
+	: MODULE modid exports? WHERE open_
 	;
 
-module_header
-	: MODULE modid exports? WHERE
+module_footer
+	: close semi*
 	;
 
 body
-    : impdecls topdecls
-    | impdecls
-    | topdecls
-    ;
-
-impdecls
-    : (impdecl | semi)+
+    : (impdecl (semi+ impdecl)*)? (topdecl (semi+ topdecl)*)?
     ;
 
 exports
@@ -88,20 +82,26 @@ cname
     ;
 
 
-// Top-Level Declarations
-topdecls
-    : (topdecl (semi+ topdecl)*)?
-    ;
-
+// top-level declarations
 topdecl
-	: TYPE simpletype Eq type
-	| DATA (context '=>')? simpletype '=' constrs deriving?
-	| NEWTYPE (context '=>')? simpletype '=' newconstr deriving?
-	| CLASS (scontext '=>')? tycls tyvar (WHERE cdecls)?
-	| INSTANCE (scontext '=>')? qtycls inst (WHERE idecls)?
-	| DEFAULT '(' (type ('*' type)*)? ')'
-	| decl
+	: typealiasdecl
+	| datadecl
+	| newtypedecl
+	| classdecl
+	| instancedecl
+	| defaultdecl
+	// inc. generic declarations (see decl; inlined to make PSI traversal nicer)
+	| vartypedecl
+	| fixitydecl
+	| patfundecl
 	;
+
+typealiasdecl: TYPE simpletype Eq type;
+datadecl: DATA (context '=>')? simpletype '=' constrs deriving?;
+newtypedecl: NEWTYPE (context '=>')? simpletype '=' newconstr deriving?;
+classdecl: CLASS (scontext '=>')? tycls tyvar (WHERE cdecls)?;
+instancedecl: INSTANCE (scontext '=>')? qtycls inst (WHERE idecls)?;
+defaultdecl: DEFAULT '(' (type ('*' type)*)? ')';
 
 decls
 	: open_ (decl (semi+ decl)*)? close

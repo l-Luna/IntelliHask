@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class HsAstElement extends ASTWrapperPsiElement{
 	
@@ -20,6 +21,9 @@ public class HsAstElement extends ASTWrapperPsiElement{
 		super(node);
 	}
 	
+	/**
+	 * Returns all children of this node, including leaf elements.
+	 */
 	public PsiElement @NotNull [] getChildren(){
 		// include leaves
 		return Trees.getChildren(this);
@@ -46,6 +50,21 @@ public class HsAstElement extends ASTWrapperPsiElement{
 			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
 				return true;
 		return false;
+	}
+	
+	public <T> Optional<T> getChildOfType(Class<T> type){
+		for(PsiElement child : getChildren())
+			if(type.isInstance(child))
+				return Optional.of(type.cast(child));
+		return Optional.empty();
+	}
+	
+	public <T> List<T> getChildrenOfType(Class<T> type){
+		List<T> ret = new ArrayList<>();
+		for(PsiElement child : getChildren())
+			if(type.isInstance(child))
+				ret.add(type.cast(child));
+		return ret;
 	}
 	
 	public String toString(){

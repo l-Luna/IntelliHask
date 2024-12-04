@@ -27,15 +27,11 @@ import java.util.Collection;
 import java.util.List;
 
 public record TyVarSymbol(String name, HsTyVarBinder owner) implements
-		HsSymbol, NavigatableSymbol,
-		DocumentationTarget, SearchTarget, RenameTarget{
+		HsSymbol,
+		NavigatableSymbol, DocumentationTarget, SearchTarget, RenameTarget{
 	
 	public @NotNull Pointer<TyVarSymbol> createPointer(){
 		return new SPointer(name, SmartPointerManager.createPointer(owner));
-	}
-	
-	public Class<HsTyVar> psiType(){
-		return HsTyVar.class;
 	}
 	
 	// navigation
@@ -83,7 +79,6 @@ public record TyVarSymbol(String name, HsTyVarBinder owner) implements
 		return UsageHandler.createEmptyUsageHandler("Type Variable '%s'".formatted(name));
 	}
 	
-	
 	@Override
 	public String toString(){
 		return "TyVarSymbol[" +
@@ -91,16 +86,7 @@ public record TyVarSymbol(String name, HsTyVarBinder owner) implements
 				"owner=" + owner + ']';
 	}
 	
-	
-	protected static class SPointer implements Pointer<TyVarSymbol>{
-		
-		private final String name;
-		private final SmartPsiElementPointer<HsTyVarBinder> ownerP;
-		
-		protected SPointer(String name, SmartPsiElementPointer<HsTyVarBinder> ownerP){
-			this.name = name;
-			this.ownerP = ownerP;
-		}
+	private record SPointer(String name, SmartPsiElementPointer<HsTyVarBinder> ownerP) implements Pointer<TyVarSymbol>{
 		
 		public @Nullable TyVarSymbol dereference(){
 			var owner = ownerP.dereference();

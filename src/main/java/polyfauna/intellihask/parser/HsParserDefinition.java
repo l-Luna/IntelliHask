@@ -17,10 +17,9 @@ import polyfauna.intellihask.antlr_generated.HaskellParser;
 import polyfauna.intellihask.psi.HsAstElement;
 import polyfauna.intellihask.psi.HsFile;
 import polyfauna.intellihask.psi.decl.HsVarTypeDecl;
-import polyfauna.intellihask.psi.file.HsLanguagePragma;
-import polyfauna.intellihask.psi.file.HsModule;
-import polyfauna.intellihask.psi.file.HsModuleBody;
-import polyfauna.intellihask.psi.file.HsPragma;
+import polyfauna.intellihask.psi.expr.HsVar;
+import polyfauna.intellihask.psi.expr.HsVars;
+import polyfauna.intellihask.psi.file.*;
 import polyfauna.intellihask.psi.Tokens;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +65,11 @@ public class HsParserDefinition implements ParserDefinition{
 	
 	public @NotNull PsiElement createElement(ASTNode node){
 		IElementType type = node.getElementType();
+		// .expr
+		if(type == Tokens.getRuleFor(HaskellParser.RULE_var) || type == Tokens.getRuleFor(HaskellParser.RULE_qvar))
+			return new HsVar(node);
+		if(type == Tokens.getRuleFor(HaskellParser.RULE_vars))
+			return new HsVars(node);
 		// .file
 		if(type == Tokens.getRuleFor(HaskellParser.RULE_module))
 			return new HsModule(node);
@@ -75,6 +79,8 @@ public class HsParserDefinition implements ParserDefinition{
 			return new HsPragma(node);
 		if(type == Tokens.getRuleFor(HaskellParser.RULE_language_pragma))
 			return new HsLanguagePragma(node);
+		if(type == Tokens.getRuleFor(HaskellParser.RULE_topdecl))
+			return new HsTopDecl(node);
 		// .decl
 		if(type == Tokens.getRuleFor(HaskellParser.RULE_vartypedecl))
 			return new HsVarTypeDecl(node);
