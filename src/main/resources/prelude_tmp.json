@@ -1,0 +1,538 @@
+{
+  "types": [
+    {
+      "name": "Bool",
+      "ctors": ["True", "False"]
+    },
+    {
+      "name": "Maybe",
+      "tvars": ["a"],
+      "ctors": [
+        "Nothing",
+        {
+          "name": "Just",
+          "params": ["a"]
+        }
+      ]
+    },
+    {
+      "name": "Either",
+      "tvars": ["a", "b"],
+      "ctors": [
+        {
+          "name": "Left",
+          "params": ["a"]
+        },
+        {
+          "name": "Right",
+          "params": ["b"]
+        }
+      ]
+    },
+    {
+      "name": "Ordering",
+      "ctors": ["LT", "EQ", "GT"]
+    },
+    "Char",
+    "Int",
+    "Integer",
+    "Float",
+    "Double",
+    "Rational",
+    {
+      "name": "IO",
+      "tvars": ["a"]
+    },
+    {
+      "name": "[]",
+      "tvars": ["a"],
+      "ctors": [
+        {
+          "name": ":",
+          "params": ["a"]
+        },
+        "[]"
+      ]
+    },
+    {
+      "name": "()",
+      "ctors": ["()"]
+    },
+    {
+      "name": "->",
+      "tyvars": ["a", "b"]
+    }
+  ],
+  "aliases": [
+    {
+      "name": "String",
+      "value": ["[]", "Char"]
+    }
+  ],
+  "classes": [
+    {
+      "name": "Eq",
+      "methods": [
+        {
+          "name": "==",
+          "type": ["a", "a", "Bool"]
+        },
+        {
+          "name": "/=",
+          "type": ["a", "a", "Bool"]
+        }
+      ],
+      "minimal": [["=="], ["/="]]
+    },
+    {
+      "name": "Ord",
+      "superclasses": ["Eq"],
+      "methods": [
+        {
+          "name": "compare",
+          "type": ["a", "a", "Ordering"]
+        },
+        {
+          "name": "<",
+          "type": ["a", "a", "Bool"]
+        },
+        {
+          "name": "<=",
+          "type": ["a", "a", "Bool"]
+        },
+        {
+          "name": ">=",
+          "type": ["a", "a", "Bool"]
+        },
+        {
+          "name": ">",
+          "type": ["a", "a", "Bool"]
+        },
+        {
+          "name": "max",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "min",
+          "type": ["a", "a", "a"]
+        }
+      ],
+      "minimal": [["<="], ["compare"]]
+    },
+    {
+      "name": "Enum",
+      "methods": [
+        {
+          "name": "succ",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "pred",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "toEnum",
+          "type": ["Int", "a"]
+        },
+        {
+          "name": "fromEnum",
+          "type": ["a", "Int"]
+        },
+        {
+          "name": "enumFrom",
+          "type": ["a", "[] a"]
+        },
+        {
+          "name": "enumFromThen",
+          "type": ["a", "a", "[] a"]
+        },
+        {
+          "name": "enumFromTo",
+          "type": ["a", "a", "[] a"]
+        },
+        {
+          "name": "enumFromThenTo",
+          "type": ["a", "a", "a", "[] a"]
+        }
+      ],
+      "minimal": [["toEnum", "fromEnum"]]
+    },
+    {
+      "name": "Bounded",
+      "methods": [
+        {
+          "name": "minBound",
+          "type": ["a"]
+        },
+        {
+          "name": "maxBound",
+          "type": ["a"]
+        }
+      ],
+      "minimal": [["minBound", "maxBound"]]
+    },
+    {
+      "name": "Num",
+      "superclasses": ["Eq", "Show"],
+      "methods": [
+        {
+          "name": "+",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "-",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "*",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "negate",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "abs",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "signum",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "fromInteger",
+          "type": ["Integer", "a"]
+        }
+      ],
+      "minimal": [["+", "-", "*", "abs", "signum", "fromInteger"], ["+", "negate", "*", "abs", "signum", "fromInteger"]]
+    },
+    {
+      "name": "Real",
+      "superclasses": ["Num", "Ord"],
+      "methods": [
+        {
+          "name": "toRational",
+          "type": ["a", "Rational"]
+        }
+      ],
+      "minimal": [["toRational"]]
+    },
+    {
+      "name": "Integral",
+      "superclasses": ["Real", "Enum"],
+      "methods": [
+        {
+          "name": "quot",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "rem",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "div",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "mod",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "quotRem",
+          "type": ["a", "a", "(,) a a"]
+        },
+        {
+          "name": "divMod",
+          "type": ["a", "a", "(,) a a"]
+        },
+        {
+          "name": "toInteger",
+          "type": ["a", "Integer"]
+        }
+      ],
+      "minimal": [["quotRem", "toInteger"]]
+    },
+    {
+      "name": "Fractional",
+      "superclasses": ["Num"],
+      "methods": [
+        {
+          "name": "/",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "recip",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "fromRational",
+          "type": ["Rational", "a"]
+        }
+      ],
+      "minimal": [["fromRational", "recip"], ["fromRational", "/"]]
+    },
+    {
+      "name": "Floating",
+      "superclasses": ["Fractional"],
+      "methods": [
+        {
+          "name": "pi",
+          "type": ["a"]
+        },
+        {
+          "name": "exp",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "log",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "sqrt",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "**",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "logBase",
+          "type": ["a", "a", "a"]
+        },
+        {
+          "name": "sin",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "cos",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "tan",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "asin",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "acos",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "atan",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "sinh",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "cosh",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "tanh",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "asin",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "acos",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "atan",
+          "type": ["a", "a"]
+        }
+      ],
+      "minimal": [["pi", "exp", "log", "sin", "cos", "sinh", "cosh", "asin", "acos", "atan", "asinh", "acosh", "atanh"]]
+    },
+    {
+      "name": "RealFrac",
+      "superclasses": ["Real", "Fractional"],
+      "methods": [
+        {
+          "name": "properFraction",
+          "tyvars": ["b"],
+          "constraints": ["Integral b"],
+          "type": ["a", "(,) b a"]
+        },
+        {
+          "name": "truncate",
+          "tyvars": ["b"],
+          "constraints": ["Integral b"],
+          "type": ["a", "b"]
+        },
+        {
+          "name": "round",
+          "tyvars": ["b"],
+          "constraints": ["Integral b"],
+          "type": ["a", "b"]
+        },
+        {
+          "name": "ceiling",
+          "tyvars": ["b"],
+          "constraints": ["Integral b"],
+          "type": ["a", "b"]
+        },
+        {
+          "name": "floor",
+          "tyvars": ["b"],
+          "constraints": ["Integral b"],
+          "type": ["a", "b"]
+        }
+      ],
+      "minimal": [["properFraction"]]
+    },
+    {
+      "name": "RealFloat",
+      "superclasses": ["RealFrac", "Floating"],
+      "methods": [
+        {
+          "name": "floatRadix",
+          "type": ["a", "Integer"]
+        },
+        {
+          "name": "floatDigits",
+          "type": ["a", "Int"]
+        },
+        {
+          "name": "floatRange",
+          "type": ["a", "(,) Int Int"]
+        },
+        {
+          "name": "decodeFloat",
+          "type": ["a", "(,) Integer Int"]
+        },
+        {
+          "name": "encodeFloat",
+          "type": ["Integer", "Int", "a"]
+        },
+        {
+          "name": "exponent",
+          "type": ["a", "Int"]
+        },
+        {
+          "name": "significand",
+          "type": ["a", "a"]
+        },
+        {
+          "name": "scaleFloat",
+          "type": ["Int", "a", "a"]
+        },
+        {
+          "name": "isNaN",
+          "type": ["a", "Bool"]
+        },
+        {
+          "name": "isInfinite",
+          "type": ["a", "Bool"]
+        },
+        {
+          "name": "isDenormalized",
+          "type": ["a", "Bool"]
+        },
+        {
+          "name": "isNegativeZero",
+          "type": ["a", "Bool"]
+        },
+        {
+          "name": "isIEEE",
+          "type": ["a", "Bool"]
+        },
+        {
+          "name": "atan2",
+          "type": ["a", "a", "a"]
+        }
+      ],
+      "minimal": [["floatRadix", "floatDigits", "floatRange", "decodeFloat", "encodeFloat", "isNaN", "isInfinite", "isDenormalized", "isNegativeZero", "isIEEE"]]
+    },
+    {
+      "name": "Functor",
+      "methods": [
+        {
+          "name": "fmap",
+          "tyvars": ["x", "y"],
+          "type": ["(->) x y", "a x", "a y"]
+        }
+      ],
+      "minimal": [["fmap"]]
+    },
+    {
+      "name": "Applicative",
+      "methods": [
+        {
+          "name": "pure",
+          "tyvars": ["x"],
+          "type": ["x", "a x"]
+        },
+        {
+          "name": "<*>",
+          "tyvars": 
+        }
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "name": "subtract",
+      "tyvars": ["a"],
+      "constraints": ["Num a"],
+      "type": ["a", "a", "a"]
+    },
+    {
+      "name": "even",
+      "tyvars": ["a"],
+      "constraints": ["Integral a"],
+      "type": ["a", "Bool"]
+    },
+    {
+      "name": "odd",
+      "tyvars": ["a"],
+      "constraints": ["Integral a"],
+      "type": ["a", "Bool"]
+    },
+    {
+      "name": "gcd",
+      "tyvars": ["a"],
+      "constraints": ["Integral a"],
+      "type": ["a", "a", "a"]
+    },
+    {
+      "name": "lcm",
+      "tyvars": ["a"],
+      "constraints": ["Integral a"],
+      "type": ["a", "a", "a"]
+    },
+    {
+      "name": "^",
+      "tyvars": ["a", "b"],
+      "constraints": ["Num a", "Integral b"],
+      "type": ["a", "b", "a"]
+    },
+    {
+      "name": "^^",
+      "tyvars": ["a", "b"],
+      "constraints": ["Fractional a", "Integral b"],
+      "type": ["a", "b", "a"]
+    },
+    {
+      "name": "fromIntegral",
+      "tyvars": ["a", "b"],
+      "constraints": ["Integral a", "Num b"],
+      "type": ["a", "b"]
+    },
+    {
+      "name": "realToFrac",
+      "tyvars": ["a", "b"],
+      "constraints": ["Real a", "Fractional b"],
+      "type": ["a", "b"]
+    }
+  ],
+  "instances": [
+
+  ]
+}

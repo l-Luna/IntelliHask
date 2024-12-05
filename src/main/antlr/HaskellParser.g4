@@ -47,7 +47,7 @@ module_footer
 	;
 
 body
-    : (impdecl (semi+ impdecl)*)? (topdecl (semi+ topdecl)*)?
+    : (impdecl (semi+ impdecl)*)? semi+ (topdecl (semi+ topdecl)*)?
     ;
 
 exports
@@ -62,7 +62,7 @@ export
     ;
 
 impdecl
-    : IMPORT QUALIFIED? modid (AS modid)? impspec? semi
+    : IMPORT QUALIFIED? modid (AS modid)? impspec?
     ;
 
 impspec
@@ -104,7 +104,7 @@ instancedecl: INSTANCE (scontext '=>')? qtycls inst (WHERE idecls)?;
 defaultdecl: DEFAULT '(' (type ('*' type)*)? ')';
 
 decls
-	: open_ (decl (semi+ decl)*)? close
+	: open_ (decl (semi decl?)*)? close
 	;
 
 decl
@@ -114,7 +114,7 @@ decl
 	;
 
 cdecls
-	: open_ (cdecl (semi+ cdecl)*)? close
+	: open_ (cdecl (semi cdecl?)*)? close
 	;
 
 cdecl
@@ -124,7 +124,7 @@ cdecl
 	;
 
 idecls
-	: open_ (idecl (semi+ idecl)*)? close
+	: open_ (idecl (semi idecl?)*)? close
 	;
 
 idecl
@@ -297,6 +297,7 @@ aexp
 	| literal
 	| '(' exp ')'
 	| '(' exp ',' exp (',' exp)* ')'
+	| '[' exp (',' exp)* ']'
 	| '[' exp (',' exp)? '..' exp? ']'
 	| '[' exp '|' qual (',' qual)* ']'
 	| '(' exp qop ')'
@@ -390,7 +391,7 @@ gconsym: ':' | qconsym ;
 tyvar: varid;
 tycon: conid;
 tycls: conid;
-modid: (conid '.')* conid;
+modid: conid ('.' conid)*;
 qvarid: (modid '.')? varid;
 qconid: (modid '.')? conid;
 qtycon: (modid '.')? tycon;

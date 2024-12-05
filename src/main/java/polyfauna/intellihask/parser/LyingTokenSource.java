@@ -40,6 +40,7 @@ public class LyingTokenSource extends PSITokenSource{
 	//       -> produce a SEMI, schedule this token next
 	//     if this has less indent than the current block, this ends the block
 	//       -> produce a VCCURLY, pop the indent from the stack, and schedule this token next
+	//       -> apply this repeatedly for each closed block
 	//   if it's a newline, consider its indent to be 0 always
 	//   if there's no current block, consider the current block indent to be 0
 	
@@ -52,7 +53,7 @@ public class LyingTokenSource extends PSITokenSource{
 		int indent = next.getStartIndex() - lastLineOffset - 1;
 		// any block kw not followed by {, even if there's no newline
 		boolean justStartedBlock = false;
-		if(wasBlockKw && next.getType() != HaskellLexer.CCURLY){
+		if(wasBlockKw && next.getType() != HaskellLexer.OCURLY){
 			blocks.push(indent);
 			preempted.push(createTok(HaskellLexer.VOCURLY, "VOCURLY", next.getStopIndex()));
 			justStartedBlock = true;
@@ -69,7 +70,7 @@ public class LyingTokenSource extends PSITokenSource{
 			seenNewline = false;
 			if(indent == curBlockIndent() && !justStartedBlock)
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
-			if(indent < curBlockIndent()){
+			while(indent < curBlockIndent()){
 				blocks.pop();
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 				preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY", next.getStopIndex()));
