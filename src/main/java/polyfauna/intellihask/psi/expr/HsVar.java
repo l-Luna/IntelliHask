@@ -1,7 +1,10 @@
 package polyfauna.intellihask.psi.expr;
 
+import com.intellij.codeInsight.lookup.LookupElement;
+import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.model.Symbol;
+import com.intellij.model.psi.PsiCompletableReference;
 import com.intellij.model.psi.PsiSymbolReference;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
@@ -14,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class HsVar extends HsSymbolReference{
+public class HsVar extends HsSymbolReference implements PsiCompletableReference{
 	
 	public HsVar(@NotNull ASTNode node){
 		super(node);
@@ -38,6 +41,14 @@ public class HsVar extends HsSymbolReference{
 	
 	public @NotNull Collection<? extends Symbol> resolveReference(){
 		return BindingSearcher.byName(getProject(), name()).collect(Collectors.toSet());
+	}
+	
+	public @NotNull Collection<@NotNull LookupElement> getCompletionVariants(){
+		return BindingSearcher.all(getProject())
+				.collect(Collectors.toSet())
+				.stream() // uniq
+				.map(BindingSymbol::describeLookup)
+				.toList();
 	}
 	
 	public boolean resolvesTo(@NotNull Symbol target){
