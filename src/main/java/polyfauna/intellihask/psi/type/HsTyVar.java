@@ -35,6 +35,7 @@ public class HsTyVar extends HsSymbolReference{
 	}
 	
 	public @NotNull Collection<TyVarSymbol> resolveReference(){
-		return HsTyVarBinder.binderFor(this).map(binder -> List.of(new TyVarSymbol(getText(), binder))).orElseGet(List::of);
+		String name = name();
+		return HsTyVarBinder.binderFor(this, name).map(binder -> List.of(new TyVarSymbol(name, binder))).orElseGet(List::of);
 	}
 }

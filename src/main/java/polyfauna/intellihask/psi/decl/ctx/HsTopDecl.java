@@ -1,4 +1,4 @@
-package polyfauna.intellihask.psi.file;
+package polyfauna.intellihask.psi.decl.ctx;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +14,6 @@ public class HsTopDecl extends HsAstElement{
 	}
 	
 	public Optional<HsDecl> inner(){
-		return Optional.ofNullable(findChildByClass(HsDecl.class));
+		return getChildOfType(HsDecl.class);
 	}
 }

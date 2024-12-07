@@ -74,9 +74,10 @@ public record PsiBindingSymbol(String name, HsModule owner)
 	
 	public @NotNull Collection<? extends NavigationTarget> getNavigationTargets(@NotNull Project project){
 		return owner.decls().stream()
+				.flatMap(HsDecl::innerDecls)
 				.filter(HsNamedDecl.class::isInstance)
 				.map(HsNamedDecl.class::cast)
-				.flatMap(x->x.vars().stream().filter(v -> v.name().equals(name)).findFirst().stream())
+				.flatMap(x -> x.vars().stream().filter(v -> v.name().equals(name)).findFirst().stream())
 				.findFirst()
 				.map(SymbolNavigationService.getInstance()::psiElementNavigationTarget)
 				.map(List::of)
@@ -90,9 +91,10 @@ public record PsiBindingSymbol(String name, HsModule owner)
 			// check if the symbol is still valid too
 			if(owner == null)
 				return null;
-			for(HsDecl decl : owner.decls())
-				if(decl instanceof HsNamedDecl hnd && hnd.names().contains(name))
-					return new PsiBindingSymbol(name, owner);
+			for(HsDecl declT : owner.decls())
+				for(HsDecl decl : declT.innerDecls().toList())
+					if(decl instanceof HsNamedDecl hnd && hnd.names().contains(name))
+						return new PsiBindingSymbol(name, owner);
 			return null;
 		}
 	}

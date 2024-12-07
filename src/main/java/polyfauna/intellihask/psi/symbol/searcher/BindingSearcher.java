@@ -5,6 +5,7 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiManager;
 import polyfauna.intellihask.psi.HsFile;
+import polyfauna.intellihask.psi.decl.HsDecl;
 import polyfauna.intellihask.psi.decl.HsNamedDecl;
 import polyfauna.intellihask.psi.symbol.BindingSymbol;
 import polyfauna.intellihask.psi.symbol.PsiBindingSymbol;
@@ -31,6 +32,7 @@ public final class BindingSearcher{
 				.map(HsFile.class::cast)
 				.flatMap(hf -> hf.module().stream())
 				.flatMap(mod -> mod.decls().stream()
+						.flatMap(HsDecl::innerDecls)
 						.filter(HsNamedDecl.class::isInstance)
 						.flatMap(decl -> ((HsNamedDecl)decl).names().stream())
 						.map(decl -> new PsiBindingSymbol(decl, mod)));

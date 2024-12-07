@@ -48,6 +48,8 @@ module_footer
 
 body
     : (impdecl (semi+ impdecl)*)? semi+ (topdecl (semi+ topdecl)*)?
+    | (impdecl (semi+ impdecl)*)?
+    | (topdecl (semi+ topdecl)*)?
     ;
 
 exports
@@ -80,7 +82,6 @@ cname
     : var
     | con
     ;
-
 
 // top-level declarations
 topdecl

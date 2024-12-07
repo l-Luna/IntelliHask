@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode;
 import polyfauna.intellihask.psi.HsAstElement;
 import org.jetbrains.annotations.NotNull;
 import polyfauna.intellihask.psi.decl.HsDecl;
+import polyfauna.intellihask.psi.decl.ctx.HsTopDecl;
 
 import java.util.List;
 

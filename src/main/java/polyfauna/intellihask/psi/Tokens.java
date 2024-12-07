@@ -8,8 +8,10 @@ import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
 import org.antlr.intellij.adaptor.lexer.RuleIElementType;
 import org.antlr.intellij.adaptor.lexer.TokenIElementType;
 import org.jetbrains.annotations.Contract;
+import polyfauna.intellihask.antlr_generated.HaskellParser;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory.createTokenSet;
 
@@ -17,6 +19,12 @@ public class Tokens{
 	
 	private static final List<TokenIElementType> TOKEN_ELEMENT_TYPES = PSIElementTypeFactory.getTokenIElementTypes(HaskellLanguage.INSTANCE);
 	private static final List<RuleIElementType> RULE_ELEMENT_TYPES = PSIElementTypeFactory.getRuleIElementTypes(HaskellLanguage.INSTANCE);
+	
+	// rules that get inlined on the LyingTreeConverter end, to make navigating PSI easier while still having groupings in the grammar
+	public static final Set<Integer> INLINED_RULES = Set.of(
+			HaskellParser.RULE_cdecls,
+			HaskellParser.RULE_idecls
+	);
 	
 	// most of the keywords from HaskellLexer, but *not* ones considered special_id; those need to be semantically highlighted later
 	public static final TokenSet KEYWORDS = createTokenSet(

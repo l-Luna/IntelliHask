@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.TerminalNode;
+import polyfauna.intellihask.psi.Tokens;
 
 public class LyingTreeConverter extends ANTLRParseTreeToPSIConverter{
 	
@@ -22,8 +23,17 @@ public class LyingTreeConverter extends ANTLRParseTreeToPSIConverter{
 			super.visitTerminal(node);
 	}
 	
+	public void enterEveryRule(ParserRuleContext ctx){
+		ProgressIndicatorProvider.checkCanceled();
+		if(Tokens.INLINED_RULES.contains(ctx.getRuleIndex()))
+			return;
+		markers.push(getBuilder().mark());
+	}
+	
 	public void exitEveryRule(ParserRuleContext ctx){
 		ProgressIndicatorProvider.checkCanceled();
+		if(Tokens.INLINED_RULES.contains(ctx.getRuleIndex()))
+			return; // TODO: handle errors created directly inside inlined rules
 		PsiBuilder.Marker marker = markers.pop();
 		// if the rule has an error and no children, then an error node was not properly created
 		// have to do it ourselves...

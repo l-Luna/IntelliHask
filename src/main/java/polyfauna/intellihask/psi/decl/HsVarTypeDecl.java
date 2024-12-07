@@ -5,6 +5,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
 import polyfauna.intellihask.psi.HsAstElement;
 import polyfauna.intellihask.psi.HsTyVarBinder;
+import polyfauna.intellihask.psi.decl.ctx.HsCDecl;
 import polyfauna.intellihask.psi.expr.HsVar;
 import polyfauna.intellihask.psi.expr.HsVars;
 import polyfauna.intellihask.psi.type.HsType;
@@ -30,16 +31,12 @@ public class HsVarTypeDecl extends HsAstElement implements HsTyVarBinder, HsName
 		return Optional.ofNullable(PsiTreeUtil.getChildOfType(this, HsType.class));
 	}
 	
-	/*public @NotNull Pointer<? extends DocumentationTarget> createPointer(){
-		return SmartPointerManager.createPointer(this);
+	public boolean captures(String name){
+		// bindings in class or instance declarations let references to the class type fall through
+		// TODO: more general lexical scoping (inc. in findNestedTyVars())
+		if(getParent() instanceof HsCDecl cd && cd.getParent() instanceof HsClassDecl cld)
+			if(cld.classVarName().equals(Optional.of(name)))
+				return false;
+		return HsTyVarBinder.super.captures(name);
 	}
-	
-	public @NotNull TargetPresentation computePresentation(){
-		return TargetPresentation.builder("").presentation();
-	}
-	
-	public @Nullable DocumentationResult computeDocumentation(){
-		return DocumentationResult.documentation("binding %s<b>%s</b> :: %s %s"
-				.formatted("<samp>", "..", type().flatMap(HsType::rep).map(Type::pretty).orElse("(invalid)"), "</samp>"));
-	}*/
 }

@@ -48,7 +48,7 @@ public final class GhcRunner{
 			if(line.startsWith("{")){
 				JsonObject e = (JsonObject)Json.Default.parseToJsonElement(line);
 				if(e.get("span") == null || e.get("span") instanceof JsonNull)
-					System.err.println("oh no, " + line);
+					continue;
 				JsonObject span = (JsonObject)e.get("span");
 				JsonObject start = (JsonObject)span.get("start"), end = (JsonObject)span.get("end");
 				
