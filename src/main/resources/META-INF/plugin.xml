@@ -70,6 +70,11 @@
                 implementationClass="polyfauna.intellihask.editor.HsCommenter"
         />
 
+        <lang.braceMatcher
+                language="Haskell"
+                implementationClass="polyfauna.intellihask.editor.HsBraceMatcher"
+        />
+
         <!-- annotators -->
 
         <annotator
@@ -104,6 +109,6 @@
         <externalAnnotator
                 language="Haskell"
                 implementationClass="polyfauna.intellihask.annotators.ext.GhcExternalAnnotator"
-        />
+        />/>
     </extensions>
 </idea-plugin>
