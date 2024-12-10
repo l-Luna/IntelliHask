@@ -75,6 +75,11 @@
                 implementationClass="polyfauna.intellihask.editor.HsBraceMatcher"
         />
 
+        <lang.quoteHandler
+                language="Haskell"
+                implementationClass="polyfauna.intellihask.editor.HsQuoteHandler"
+        />
+
         <!-- annotators -->
 
         <annotator

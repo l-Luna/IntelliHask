@@ -157,6 +157,7 @@ Colon              : ':';
 Eq                 : '=';
 Quote              : '\'';
 DoubleQuote        : '\'\'';
+SQuote             : '"';
 ReverseSlash       : '\\';
 BackQuote          : '`';
 AopenParen         : '(|' WS;

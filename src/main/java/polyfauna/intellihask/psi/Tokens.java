@@ -61,6 +61,8 @@ public class Tokens{
 	public static final TokenSet COMMENTS = createTokenSet(HaskellLanguage.INSTANCE, HaskellLexer.COMMENT, HaskellLexer.NCOMMENT);
 	public static final TokenSet STRINGS = createTokenSet(HaskellLanguage.INSTANCE, HaskellLexer.STRING);
 	
+	public static final TokenSet STRING_LIKE = createTokenSet(HaskellLanguage.INSTANCE, HaskellLexer.STRING, HaskellLexer.CHAR);
+	
 	@Contract(pure = true)
 	public static IElementType getFor(int type){
 		return TOKEN_ELEMENT_TYPES.get(type);

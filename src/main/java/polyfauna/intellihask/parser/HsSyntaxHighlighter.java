@@ -36,7 +36,7 @@ public class HsSyntaxHighlighter extends SyntaxHighlighterFactory implements Syn
 			return arr(KEYWORD);
 		else if(Tokens.COMMENTS.contains(tt))
 			return arr(COMMENT);
-		else if(Tokens.STRINGS.contains(tt))
+		else if(Tokens.STRING_LIKE.contains(tt))
 			return arr(STRING);
 		
 		return new TextAttributesKey[0];
