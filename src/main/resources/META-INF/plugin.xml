@@ -12,6 +12,8 @@
 
     <depends>com.intellij.modules.platform</depends>
 
+    <resource-bundle>messages.IntellihaskBundle</resource-bundle>
+
     <extensions defaultExtensionNs="com.intellij">
 
         <!-- settings -->
@@ -91,6 +93,17 @@
                 implementationClass="polyfauna.intellihask.annotators.TyVarColourAnnotator"
         />
 
+        <!-- presentation -->
+
+        <codeInsight.declarativeInlayProvider
+                language="Haskell"
+                group="OTHER_GROUP"
+                isEnabledByDefault="true"
+                nameKey="haskell.layout.hints"
+                providerId="HaskellLayoutInlayProvider"
+                implementationClass="polyfauna.intellihask.presentation.LayoutInlayProvider"
+        />
+
         <!-- documentation -->
 
         <!-- completion -->
@@ -114,6 +127,6 @@
         <externalAnnotator
                 language="Haskell"
                 implementationClass="polyfauna.intellihask.annotators.ext.GhcExternalAnnotator"
-        />/>
+        />
     </extensions>
 </idea-plugin>

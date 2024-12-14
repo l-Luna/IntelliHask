@@ -43,7 +43,7 @@ module_header
 	;
 
 module_footer
-	: close semi*
+	: semi* close semi*
 	;
 
 body

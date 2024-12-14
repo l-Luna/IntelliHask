@@ -15,6 +15,7 @@ public class LyingTokenSource extends PSITokenSource{
 	
 	protected Deque<Token> preempted = new ArrayDeque<>();
 	protected Deque<Integer> blocks = new ArrayDeque<>();
+	protected Deque<Integer> parens = new ArrayDeque<>();
 	protected boolean wasBlockKw = false;
 	// we don't *actually* have access to line numbers or indexes, but we see newlines, so like same difference
 	protected boolean seenNewline = false;
@@ -54,7 +55,7 @@ public class LyingTokenSource extends PSITokenSource{
 		// any block kw not followed by {, even if there's no newline
 		boolean justStartedBlock = false;
 		if(wasBlockKw && next.getType() != HaskellLexer.OCURLY){
-			blocks.push(indent);
+			pushBlock(indent);
 			preempted.push(createTok(HaskellLexer.VOCURLY, "VOCURLY", next.getStopIndex()));
 			justStartedBlock = true;
 		}
@@ -62,7 +63,7 @@ public class LyingTokenSource extends PSITokenSource{
 			// all remaining VCCURLYs, plus two SEMIs for the road
 			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
 			while(!blocks.isEmpty()){
-				blocks.pop();
+				popBlock();
 				preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-EOF", next.getStopIndex()));
 			}
 			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
@@ -71,10 +72,20 @@ public class LyingTokenSource extends PSITokenSource{
 			if(indent == curBlockIndent() && !justStartedBlock)
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 			while(indent < curBlockIndent()){
-				blocks.pop();
+				popBlock();
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 				preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY", next.getStopIndex()));
+				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 			}
+		}
+		if(next.getType() == HaskellLexer.OpenRoundBracket)
+			afterParen(1);
+		if(next.getType() == HaskellLexer.CloseRoundBracket)
+			afterParen(-1);
+		if(isDanglingParen()){
+			popBlock();
+			preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-P", next.getStopIndex()));
+			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-P", next.getStopIndex()));
 		}
 		wasBlockKw = switch(next.getType()){
 			case HaskellLexer.LET, HaskellLexer.WHERE, HaskellLexer.DO, HaskellLexer.OF -> true;
@@ -87,6 +98,25 @@ public class LyingTokenSource extends PSITokenSource{
 		if(!blocks.isEmpty())
 			return blocks.peek();
 		return 0;
+	}
+	
+	protected void pushBlock(int indent){
+		blocks.push(indent);
+		parens.push(0);
+	}
+	
+	protected void popBlock(){
+		blocks.pop();
+		parens.pop();
+	}
+	
+	protected void afterParen(int adj){
+		if(!parens.isEmpty())
+			parens.push(parens.pop() + adj);
+	}
+	
+	protected boolean isDanglingParen(){
+		return !parens.isEmpty() && parens.peek() < 0;
 	}
 	
 	protected Token createTok(int type, String name, int nstop){
