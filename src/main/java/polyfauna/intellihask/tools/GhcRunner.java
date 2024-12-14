@@ -7,6 +7,8 @@ import com.intellij.execution.wsl.WslDistributionManager;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import kotlinx.serialization.json.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import polyfauna.intellihask.settings.IhSettings;
 
 import java.io.IOException;
@@ -20,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public final class GhcRunner{
+	
+	private static final Logger log = LoggerFactory.getLogger(GhcRunner.class);
 	
 	public static boolean invoke(List<String> filepaths, Reporter reporter)
 			throws IOException, ExecutionException, InterruptedException{
@@ -35,13 +39,19 @@ public final class GhcRunner{
 		
 		filepaths.forEach(filepath -> appendParam(params, wsl ? distro.getWslPath(Path.of(filepath)) : filepath));
 		
-		Process proc = new ProcessBuilder(params).start();
-		boolean finished = proc.waitFor(15, TimeUnit.SECONDS);
-		if(!finished){
-			proc.destroy();
-			return false; // no second chances
+		String out;
+		try{
+			Process proc = new ProcessBuilder(params).start();
+			boolean finished = proc.waitFor(15, TimeUnit.SECONDS);
+			if(!finished){
+				proc.destroy();
+				return false; // no second chances
+			}
+			out = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(proc.getErrorStream().readAllBytes())).toString();
+		}catch(IOException e){
+			log.error("e: ", e);
+			return false;
 		}
-		String out = StandardCharsets.UTF_8.decode(ByteBuffer.wrap(proc.getErrorStream().readAllBytes())).toString();
 		List<String> lines = List.of(out.split("\n"));
 		
 		for(String line : lines)
