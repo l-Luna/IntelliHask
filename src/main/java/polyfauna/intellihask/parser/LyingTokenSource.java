@@ -13,10 +13,20 @@ import java.util.Deque;
 // inserts SEMI, VOCURLY, and VCCURLY tokens for parsing, to be removed later
 public class LyingTokenSource extends PSITokenSource{
 	
+	protected static class Block{
+		int indent;
+		int parens;
+		boolean isLetBlock;
+		
+		public Block(int indent, boolean isLetBlock){
+			this.indent = indent;
+			this.isLetBlock = isLetBlock;
+		}
+	}
+	
 	protected Deque<Token> preempted = new ArrayDeque<>();
-	protected Deque<Integer> blocks = new ArrayDeque<>();
-	protected Deque<Integer> parens = new ArrayDeque<>();
-	protected boolean wasBlockKw = false;
+	protected Deque<Block> blocks = new ArrayDeque<>();
+	protected boolean wasBlockKw = false, wasLetKw = false;
 	// we don't *actually* have access to line numbers or indexes, but we see newlines, so like same difference
 	protected boolean seenNewline = false;
 	protected int lastLineOffset = 0;
@@ -52,13 +62,37 @@ public class LyingTokenSource extends PSITokenSource{
 		Token next = super.nextToken(); // possibly triggers the whitespace callback
 		preempted.push(next);
 		int indent = next.getStartIndex() - lastLineOffset - 1;
-		// any block kw not followed by {, even if there's no newline
-		boolean justStartedBlock = false;
+		// start a new block after any block kw not followed by {, even if there's no newline
+		boolean noExtraSemi = false;
 		if(wasBlockKw && next.getType() != HaskellLexer.OCURLY){
 			pushBlock(indent);
 			preempted.push(createTok(HaskellLexer.VOCURLY, "VOCURLY", next.getStopIndex()));
-			justStartedBlock = true;
+			// don't start every block with an unnecessary semi
+			noExtraSemi = true;
 		}
+		
+		// adjust parens for this block
+		if(next.getType() == HaskellLexer.OpenRoundBracket)
+			afterParen(1);
+		if(next.getType() == HaskellLexer.CloseRoundBracket)
+			afterParen(-1);
+		// if the current block has dangling parenthesis, we know we should finish early
+		// e.g. `(case h of \{ [] -> [] \; \})`
+		if(isDanglingParen()){
+			popBlock();
+			preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-P", next.getStopIndex()));
+			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-P", next.getStopIndex()));
+			// if the current block was implicitly triggered by a `let` keyword, the `in` keyword can also end it early
+			// e.g. `let \{ p = 1 \; \} in p`
+			// but we don't want normal semis to be inserted in the multiline case,
+			// i.e. `let \n \{ p = 1 \n \; \} \; in p` would be unwanted
+		}else if(isLetBlock() && next.getType() == HaskellLexer.IN){
+			popBlock();
+			preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-L", next.getStopIndex()));
+			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-L", next.getStopIndex()));
+			noExtraSemi = true;
+		}
+		
 		if(next.getType() == HaskellLexer.EOF){
 			// all remaining VCCURLYs, plus two SEMIs for the road
 			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
@@ -69,7 +103,7 @@ public class LyingTokenSource extends PSITokenSource{
 			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-EOF", next.getStopIndex()));
 		}else if(seenNewline){
 			seenNewline = false;
-			if(indent == curBlockIndent() && !justStartedBlock)
+			if(indent == curBlockIndent() && !noExtraSemi)
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 			while(indent < curBlockIndent()){
 				popBlock();
@@ -78,47 +112,43 @@ public class LyingTokenSource extends PSITokenSource{
 				preempted.push(createTok(HaskellLexer.SEMI, "SEMI", next.getStopIndex()));
 			}
 		}
-		if(next.getType() == HaskellLexer.OpenRoundBracket)
-			afterParen(1);
-		if(next.getType() == HaskellLexer.CloseRoundBracket)
-			afterParen(-1);
-		if(isDanglingParen()){
-			popBlock();
-			preempted.push(createTok(HaskellLexer.VCCURLY, "VCCURLY-P", next.getStopIndex()));
-			preempted.push(createTok(HaskellLexer.SEMI, "SEMI-P", next.getStopIndex()));
-		}
+		
 		wasBlockKw = switch(next.getType()){
 			case HaskellLexer.LET, HaskellLexer.WHERE, HaskellLexer.DO, HaskellLexer.OF -> true;
 			default -> false;
 		};
+		wasLetKw = next.getType() == HaskellLexer.LET;
 		return preempted.pop();
 	}
 	
 	protected int curBlockIndent(){
 		if(!blocks.isEmpty())
-			return blocks.peek();
+			return blocks.peek().indent;
 		return 0;
 	}
 	
 	protected void pushBlock(int indent){
-		blocks.push(indent);
-		parens.push(0);
+		blocks.push(new Block(indent, wasLetKw));
 	}
 	
 	protected void popBlock(){
 		blocks.pop();
-		parens.pop();
 	}
 	
 	protected void afterParen(int adj){
-		if(!parens.isEmpty())
-			parens.push(parens.pop() + adj);
+		if(!blocks.isEmpty())
+			blocks.peek().parens += adj;
 	}
 	
 	protected boolean isDanglingParen(){
-		return !parens.isEmpty() && parens.peek() < 0;
+		return !blocks.isEmpty() && blocks.peek().parens < 0;
 	}
 	
+	protected boolean isLetBlock(){
+		return !blocks.isEmpty() && blocks.peek().isLetBlock;
+	}
+	
+	@SuppressWarnings("unchecked")
 	protected Token createTok(int type, String name, int nstop){
 		return /* VCCURLY */ tokenFactory.create(
 				new Pair<>(this, ""),
