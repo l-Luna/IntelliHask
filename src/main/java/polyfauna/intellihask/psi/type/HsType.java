@@ -24,14 +24,17 @@ public class HsType extends HsAstElement{
 	
 	// not a fan tbh
 	private static Optional<Type> repTy(HsAstElement elem){
-		List<HsAstElement> btypes = elem.getChildrenOfAstType(Tokens.getRuleFor(HaskellParser.RULE_btype));
-		if(btypes.size() == 2 && elem.countChildrenOfAstType(Tokens.getFor(HaskellLexer.Arrow)) == 1)
-			return repB(btypes.get(0)).flatMap(l ->
-					repB(btypes.get(1)).map(r ->
-						new Type.TyApp(Type.Arrow.ARROW, List.of(l, r))));
-		if(btypes.size() == 1)
-			return repB(btypes.getFirst());
-		return Optional.empty();
+		Optional<HsAstElement> inner = elem.getChildOfAstType(Tokens.getRuleFor(HaskellParser.RULE_btype));
+		if(inner.isEmpty())
+			return Optional.empty();
+		
+		Optional<HsType> arrRight = elem.getChildOfType(HsType.class);
+		if(arrRight.isPresent() && elem.countChildrenOfAstType(Tokens.getFor(HaskellLexer.Arrow)) == 1)
+			return repB(inner.get()).flatMap(l ->
+					repTy(arrRight.get()).map(r ->
+							new Type.TyApp(Type.Arrow.ARROW, List.of(l, r))));
+		
+		return repB(inner.get());
 	}
 	
 	private static Optional<Type> repB(HsAstElement elem){

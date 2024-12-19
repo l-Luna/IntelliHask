@@ -4,6 +4,7 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.tree.IElementType;
 import polyfauna.intellihask.antlr_generated.HaskellParser;
@@ -29,26 +30,43 @@ public class HsAstElement extends ASTWrapperPsiElement{
 		return Trees.getChildren(this);
 	}
 	
+	public Optional<HsAstElement> getChildOfAstType(IElementType type){
+		for(PsiElement child : getChildren())
+			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
+				return Optional.of(hae);
+			/*if(child instanceof LeafPsiElement leaf && leaf.getElementType() == type)
+				return Optional.of(leaf);*/
+		return Optional.empty();
+	}
+	
 	public List<HsAstElement> getChildrenOfAstType(IElementType type){
 		List<HsAstElement> ret = new ArrayList<>();
 		for(PsiElement child : getChildren())
 			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
 				ret.add(hae);
+			/*if(child instanceof LeafPsiElement leaf && leaf.getElementType() == type)
+				ret.add(leaf);*/
 		return ret;
 	}
 	
 	public int countChildrenOfAstType(IElementType type){
 		int c = 0;
-		for(PsiElement child : getChildren())
+		for(PsiElement child : getChildren()){
 			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
 				c++;
+			if(child instanceof LeafPsiElement leaf && leaf.getElementType() == type)
+				c++;
+		}
 		return c;
 	}
 	
 	public boolean hasChildOfAstType(IElementType type){
-		for(PsiElement child : getChildren())
+		for(PsiElement child : getChildren()){
 			if(child instanceof HsAstElement hae && hae.getNode().getElementType() == type)
 				return true;
+			if(child instanceof LeafPsiElement leaf && leaf.getElementType() == type)
+				return true;
+		}
 		return false;
 	}
 	

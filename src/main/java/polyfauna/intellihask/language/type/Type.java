@@ -21,7 +21,7 @@ public sealed interface Type{
 			case TyApp(Tuple(int count), List<Type> args) when args.size() == count
 					-> "(" + String.join(", ", args.stream().map(Type::pretty).toList()) + ")";
 			
-			case TyApp(Type head, List<Type> args) -> head.pretty() + String.join(" ", args.stream().map(Type::pretty).toList());
+			case TyApp(Type head, List<Type> args) -> head.pretty() + " " + String.join(" ", args.stream().map(Type::pretty).toList());
 			case Arrow.ARROW -> "(->)";
 			case List_.LIST -> "[]";
 			case Tuple(int count) -> "(" + ",".repeat(Math.max(0, count - 1)) + ")";

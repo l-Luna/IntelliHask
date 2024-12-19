@@ -24,7 +24,6 @@ import polyfauna.intellihask.psi.file.HsModule;
 import polyfauna.intellihask.psi.type.HsType;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -34,7 +33,7 @@ public record PsiBindingSymbol(String name, HsModule owner)
 		implements BindingSymbol,
 		NavigatableSymbol, DocumentationTarget, SearchTarget{
 	
-	// note that we *physically* point so a HsModule; the pointer class checks that the specific
+	// note that we *physically* point to a HsModule; the pointer class checks that the specific
 	// symbol actually still exists
 	
 	public String name(){
@@ -69,7 +68,7 @@ public record PsiBindingSymbol(String name, HsModule owner)
 	}
 	
 	public @NotNull DocumentationResult computeDocumentation(){
-		return DocumentationResult.documentation("binding <strong><samp>%s</samp></strong>".formatted(name));
+		return DocumentationResult.documentation("binding <samp><strong>%s</strong> :: %s</samp>".formatted(name, type().map(Type::pretty).orElse("??")));
 	}
 	
 	public @NotNull Collection<? extends NavigationTarget> getNavigationTargets(@NotNull Project project){
@@ -78,10 +77,8 @@ public record PsiBindingSymbol(String name, HsModule owner)
 				.filter(HsNamedDecl.class::isInstance)
 				.map(HsNamedDecl.class::cast)
 				.flatMap(x -> x.vars().stream().filter(v -> v.name().equals(name)).findFirst().stream())
-				.findFirst()
 				.map(SymbolNavigationService.getInstance()::psiElementNavigationTarget)
-				.map(List::of)
-				.orElse(List.of());
+				.toList();
 	}
 	
 	private record SPointer(String name, SmartPsiElementPointer<HsModule> ownerP) implements Pointer<PsiBindingSymbol>{
