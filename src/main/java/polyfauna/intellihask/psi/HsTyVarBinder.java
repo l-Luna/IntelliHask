@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 /**
- * A syntax element that implicitly binds all child type variables.
+ * An element that implicitly binds all child type variables.
  */
 public interface HsTyVarBinder extends PsiElement{
 	

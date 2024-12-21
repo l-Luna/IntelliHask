@@ -18,33 +18,31 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import polyfauna.intellihask.language.type.Type;
 import polyfauna.intellihask.psi.decl.HsDecl;
+import polyfauna.intellihask.psi.decl.HsDeclGroup;
 import polyfauna.intellihask.psi.decl.HsNamedDecl;
 import polyfauna.intellihask.psi.decl.HsVarTypeDecl;
-import polyfauna.intellihask.psi.file.HsModule;
 import polyfauna.intellihask.psi.type.HsType;
 
 import java.util.Collection;
 import java.util.Optional;
 
 /**
- * A {@linkplain BindingSymbol} backed by a PSI element.
+ * A {@linkplain BindingSymbol} for a binding in a group, backed by PSI elements.
+ * <p>
+ * Grouped bindings may have multiple definitions and be defined mutually recursively with other
+ * bindings in the group; a grouped symbol points to the binding group that it is defined in.
  */
-public record PsiBindingSymbol(String name, HsModule owner)
+public record PsiGroupedBindingSymbol(String name, HsDeclGroup owner)
 		implements BindingSymbol,
 		NavigatableSymbol, DocumentationTarget, SearchTarget{
 	
-	// note that we *physically* point to a HsModule; the pointer class checks that the specific
-	// symbol actually still exists
-	
-	public String name(){
-		return name;
-	}
-	
 	public SearchScope getMaximalSearchScope(){
+		// TODO: can usually be reduced
+		// (e.g. non-exported top-level items to the file scope, and local items further)
 		return GlobalSearchScope.allScope(owner.getProject());
 	}
 	
-	public @NotNull Pointer<PsiBindingSymbol> createPointer(){
+	public @NotNull Pointer<PsiGroupedBindingSymbol> createPointer(){
 		return new SPointer(name, SmartPointerManager.createPointer(owner));
 	}
 	
@@ -81,17 +79,17 @@ public record PsiBindingSymbol(String name, HsModule owner)
 				.toList();
 	}
 	
-	private record SPointer(String name, SmartPsiElementPointer<HsModule> ownerP) implements Pointer<PsiBindingSymbol>{
+	private record SPointer(String name, SmartPsiElementPointer<HsDeclGroup> ownerP) implements Pointer<PsiGroupedBindingSymbol>{
 		
-		public @Nullable PsiBindingSymbol dereference(){
-			var owner = ownerP.dereference();
+		public @Nullable PsiGroupedBindingSymbol dereference(){
+			HsDeclGroup owner = ownerP.dereference();
 			// check if the symbol is still valid too
 			if(owner == null)
 				return null;
 			for(HsDecl declT : owner.decls())
 				for(HsDecl decl : declT.innerDecls().toList())
 					if(decl instanceof HsNamedDecl hnd && hnd.names().contains(name))
-						return new PsiBindingSymbol(name, owner);
+						return new PsiGroupedBindingSymbol(name, owner);
 			return null;
 		}
 	}

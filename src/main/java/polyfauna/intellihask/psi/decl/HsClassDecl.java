@@ -2,7 +2,9 @@ package polyfauna.intellihask.psi.decl;
 
 import com.intellij.lang.ASTNode;
 import org.jetbrains.annotations.NotNull;
+import polyfauna.intellihask.language.decls.BindingType;
 import polyfauna.intellihask.psi.HsAstElement;
+import polyfauna.intellihask.psi.HsBindingOwner;
 import polyfauna.intellihask.psi.HsTyVarBinder;
 import polyfauna.intellihask.psi.decl.ctx.HsCDecl;
 import polyfauna.intellihask.psi.type.HsTyVar;
@@ -10,7 +12,7 @@ import polyfauna.intellihask.psi.type.HsTyVar;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class HsClassDecl extends HsAstElement implements HsDecl, HsTyVarBinder{
+public class HsClassDecl extends HsAstElement implements HsDecl, HsTyVarBinder, HsDeclGroup{
 	
 	public HsClassDecl(@NotNull ASTNode node){
 		super(node);
@@ -30,5 +32,9 @@ public class HsClassDecl extends HsAstElement implements HsDecl, HsTyVarBinder{
 				getChildrenOfType(HsCDecl.class).stream()
 						.flatMap(cd -> cd.inner().stream())
 		);
+	}
+	
+	public BindingType bindingType(){
+		return BindingType.GROUP;
 	}
 }

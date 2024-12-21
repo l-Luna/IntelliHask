@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import polyfauna.intellihask.psi.HsAstElement;
 import polyfauna.intellihask.psi.HsTyVarBinder;
 import polyfauna.intellihask.psi.decl.ctx.HsCDecl;
-import polyfauna.intellihask.psi.expr.HsVar;
-import polyfauna.intellihask.psi.expr.HsVars;
+import polyfauna.intellihask.psi.expr.HsDVar;
+import polyfauna.intellihask.psi.expr.HsDVars;
 import polyfauna.intellihask.psi.type.HsType;
 
 import java.util.List;
@@ -20,11 +20,11 @@ public class HsVarTypeDecl extends HsAstElement implements HsTyVarBinder, HsName
 	}
 	
 	public List<String> names(){
-		return vars().stream().map(HsVar::name).toList();
+		return vars().stream().map(HsDVar::name).toList();
 	}
 	
-	public List<HsVar> vars(){
-		return getChildOfType(HsVars.class).map(HsVars::vars).orElse(List.of());
+	public List<HsDVar> vars(){
+		return getChildOfType(HsDVars.class).map(HsDVars::vars).orElse(List.of());
 	}
 	
 	public Optional<HsType> type(){

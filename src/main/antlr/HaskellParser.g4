@@ -57,9 +57,9 @@ exports
     ;
 
 export
-    : qvar
+    : uqvar
     | ( qtycon ( ('(' '..' ')') | ('(' (cname (',' cname)*)? ')'))?)
-    | ( qtycls ( ('(' '..' ')') | ('(' (qvar (',' qvar)*)? ')'))?)
+    | ( qtycls ( ('(' '..' ')') | ('(' (uqvar (',' uqvar)*)? ')'))?)
     | ( MODULE modid )
     ;
 
@@ -73,13 +73,13 @@ impspec
     ;
 
 import_
-    : var
+    : uvar
     | ( tycon ( ('(' '..' ')') | ('(' (cname (',' cname)*)? ')'))?)
-    | ( tycls ( ('(' '..' ')') | ('(' (var (',' var)*)? ')'))?)
+    | ( tycls ( ('(' '..' ')') | ('(' (uvar (',' uvar)*)? ')'))?)
     ;
 
 cname
-    : var
+    : uvar
     | con
     ;
 
@@ -104,11 +104,11 @@ classdecl: CLASS (scontext '=>')? tycls tyvar (WHERE cdecls)?;
 instancedecl: INSTANCE (scontext '=>')? qtycls inst (WHERE idecls)?;
 defaultdecl: DEFAULT '(' (type ('*' type)*)? ')';
 
-decls
-	: open_ (decl (semi decl?)*)? close
+gendecls
+	: open_ (gendecl (semi gendecl?)*)? close
 	;
 
-decl
+gendecl
 	: vartypedecl
 	| fixitydecl
 	| patfundecl
@@ -133,7 +133,7 @@ idecl
 	;
 
 vartypedecl
-	: vars '::' (context '=>')? type
+	: dvars '::' (context '=>')? type
 	;
 
 fixitydecl
@@ -145,15 +145,15 @@ patfundecl
 	;
 
 varfundecl
-	: (funlhs | var) rhs
+	: funlhs rhs
 	;
 
 ops
 	: op (',' op)*
 	;
 
-vars
-	: var (',' var)*
+dvars
+	: dvar (',' dvar)*
 	;
 
 fixity
@@ -224,11 +224,11 @@ constr
 
 newconstr
 	: con atype
-	| con '{' var '::' type '}'
+	| con '{' dvar '::' type '}'
 	;
 
 fielddecl
-	: vars '::' (type | '!' atype)
+	: dvars '::' (type | '!' atype)
 	;
 
 deriving
@@ -246,14 +246,14 @@ inst
 	;
 
 funlhs
-	: var apat+
+	: dvar apat*
 	| pat varop pat
 	| '(' funlhs ')' apat+
 	;
 
 rhs
-	: '=' exp (WHERE decls)?
-	| guardrhs (WHERE decls)?
+	: '=' exp (WHERE gendecls)?
+	| guardrhs (WHERE gendecls)?
 	;
 
 guardrhs
@@ -274,7 +274,7 @@ exp0
 
 exp10
 	: '\\' apat+ '->' exp
-	| LET decls IN exp
+	| LET gendecls IN exp
 	| IF exp THEN exp ELSE exp
 	| CASE exp OF open_ alts close
 	| DO open_ stmts close
@@ -293,7 +293,7 @@ upd
 	;
 
 aexp
-	: qvar
+	: uqvar
 	| gcon
 	| literal
 	| '(' exp ')'
@@ -307,7 +307,7 @@ aexp
 
 qual
 	: pat '<-' exp
-	| LET decls
+	| LET gendecls
 	| exp
 	;
 
@@ -316,8 +316,8 @@ alts
 	;
 
 alt
-	: pat '->' exp (WHERE decls)?
-	| pat gdpat (WHERE decls)?
+	: pat '->' exp (WHERE gendecls)?
+	| pat gdpat (WHERE gendecls)?
 	// |
 	;
 
@@ -332,12 +332,12 @@ stmts
 stmt
 	: exp semi
 	| pat '<-' exp semi
-	| LET decls semi
+	| LET gendecls semi
 	| semi
 	;
 
 fbind
-	: qvar '=' exp
+	: uqvar '=' exp
 	;
 
 pat: pat0; // no n+k patterns sorry
@@ -353,7 +353,7 @@ pat10
 	;
 
 apat
-	: var ('@' apat)?
+	: dvar ('@' apat)?
 	| gcon
 	| qcon '{' (fpat (',' fpat)*)? '}'
 	| literal
@@ -365,10 +365,8 @@ apat
 	;
 
 fpat
-	: qvar '=' pat
+	: uqvar '=' pat
 	;
-
-// Variables
 
 gcon
 	: '(' ')'
@@ -377,8 +375,16 @@ gcon
 	| qcon
 	;
 
+// syntactic definition of variables
 var: varid | '(' varsym ')';
 qvar: qvarid | '(' qvarsym ')';
+
+// then disambiguation between declarations or usages
+dvar: var;
+dqvar: qvar;
+uvar: var;
+uqvar: qvar;
+
 con: conid | '(' consym ')';
 qcon: qconid | '(' gconsym ')';
 varop: varsym | '`' varid '`';

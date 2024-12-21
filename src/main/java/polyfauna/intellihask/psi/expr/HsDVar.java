@@ -1,25 +1,29 @@
 package polyfauna.intellihask.psi.expr;
 
 import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.lang.ASTNode;
 import com.intellij.model.Symbol;
 import com.intellij.model.psi.PsiCompletableReference;
+import com.intellij.model.psi.PsiSymbolDeclaration;
 import com.intellij.model.psi.PsiSymbolReference;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
+import polyfauna.intellihask.psi.HsBindingOwner;
 import polyfauna.intellihask.psi.HsSymbolReference;
+import polyfauna.intellihask.psi.decl.HsDeclGroup;
 import polyfauna.intellihask.psi.symbol.BindingSymbol;
+import polyfauna.intellihask.psi.symbol.PsiGroupedBindingSymbol;
+import polyfauna.intellihask.psi.symbol.PsiPatternBindingSymbol;
 import polyfauna.intellihask.psi.symbol.searcher.BindingSearcher;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class HsVar extends HsSymbolReference implements PsiCompletableReference{
+public class HsDVar extends HsSymbolReference implements PsiCompletableReference, PsiSymbolDeclaration{
 	
-	public HsVar(@NotNull ASTNode node){
+	public HsDVar(@NotNull ASTNode node){
 		super(node);
 	}
 	
@@ -31,8 +35,20 @@ public class HsVar extends HsSymbolReference implements PsiCompletableReference{
 		return this;
 	}
 	
+	public @NotNull PsiElement getDeclaringElement(){
+		return this;
+	}
+	
 	public @NotNull TextRange getRangeInElement(){
 		return TextRange.from(0, getTextLength());
+	}
+	
+	public @NotNull TextRange getRangeInDeclaringElement(){
+		return getRangeInElement();
+	}
+	
+	public @NotNull TextRange getAbsoluteRange(){
+		return super.getAbsoluteRange();
 	}
 	
 	public @NotNull Collection<? extends @NotNull PsiSymbolReference> getOwnReferences(){
@@ -40,13 +56,19 @@ public class HsVar extends HsSymbolReference implements PsiCompletableReference{
 	}
 	
 	public @NotNull Collection<? extends Symbol> resolveReference(){
-		return BindingSearcher.byName(getProject(), name()).collect(Collectors.toSet());
+		return List.of(getSymbol());
+	}
+	
+	public @NotNull Symbol getSymbol(){
+		HsBindingOwner owner = PsiTreeUtil.getParentOfType(this, HsBindingOwner.class);
+		return owner instanceof HsDeclGroup hdg
+				? new PsiGroupedBindingSymbol(name(), hdg)
+				: new PsiPatternBindingSymbol(name(), this);
 	}
 	
 	public @NotNull Collection<@NotNull LookupElement> getCompletionVariants(){
-		return BindingSearcher.all(getProject())
-				.collect(Collectors.toSet())
-				.stream() // uniq
+		return BindingSearcher.topLevel(getProject())
+				.distinct()
 				.map(BindingSymbol::describeLookup)
 				.toList();
 	}

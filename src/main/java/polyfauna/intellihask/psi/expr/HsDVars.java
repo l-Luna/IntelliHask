@@ -6,13 +6,13 @@ import polyfauna.intellihask.psi.HsAstElement;
 
 import java.util.List;
 
-public class HsVars extends HsAstElement{
+public class HsDVars extends HsAstElement{
 	
-	public HsVars(@NotNull ASTNode node){
+	public HsDVars(@NotNull ASTNode node){
 		super(node);
 	}
 	
-	public List<HsVar> vars(){
-		return getChildrenOfType(HsVar.class);
+	public List<HsDVar> vars(){
+		return getChildrenOfType(HsDVar.class);
 	}
 }

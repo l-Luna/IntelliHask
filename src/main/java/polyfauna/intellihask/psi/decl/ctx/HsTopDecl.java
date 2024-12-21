@@ -7,13 +7,9 @@ import polyfauna.intellihask.psi.decl.HsDecl;
 
 import java.util.Optional;
 
-public class HsTopDecl extends HsAstElement{
+public class HsTopDecl extends HsAstElement implements HsDeclCtx{
 	
 	public HsTopDecl(@NotNull ASTNode node){
 		super(node);
-	}
-	
-	public Optional<HsDecl> inner(){
-		return getChildOfType(HsDecl.class);
 	}
 }

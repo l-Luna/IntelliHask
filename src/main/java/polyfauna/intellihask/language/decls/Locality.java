@@ -1,4 +1,4 @@
-package polyfauna.intellihask.language.modules;
+package polyfauna.intellihask.language.decls;
 
 public enum Locality{
 	LOCAL,   // where/let bound bindings
